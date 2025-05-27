@@ -8,19 +8,24 @@
         <li class="header__list-item">Оформление заказа</li>
         <li class="header__list-item">Профиль</li>
       </ul>
-      <UiIcon name="profile" class="header__profile" />
+      <div class="header__right-block">
+        <UiIcon name="profile" class="header__profile" />
+        <UiBurger />
+      </div>
     </div>
     <hr class="main-hr" />
   </div>
 </template>
 
 <script>
+import UiBurger from "../ui/UiBurger.vue";
 import UiIcon from "../ui/UiIcon.vue";
 
 export default {
   name: "Header",
   components: {
     UiIcon,
+    UiBurger,
   },
 };
 </script>
@@ -48,4 +53,9 @@ export default {
       text-transform uppercase
       text-decoration none;
       list-style-type none;
+
+    &__right-block
+        display flex
+        align-items center
+        gap 20px
 </style>
