@@ -3,10 +3,15 @@
     <div class="header__container main-wrapper">
       <UiIcon name="logo-white" class="header__logo" />
       <ul class="header__list">
-        <li class="header__list-item">Новости</li>
-        <li class="header__list-item">Аукционы</li>
-        <li class="header__list-item">Оформление заказа</li>
-        <li class="header__list-item">Профиль</li>
+        <li
+          v-for="item in headerItems"
+          :key="item.route"
+          class="header__list-item"
+        >
+          <router-link :to="item.route" class="header__link">
+            {{ item.label }}
+          </router-link>
+        </li>
       </ul>
       <div class="header__right-block">
         <UiIcon name="profile" class="header__profile" />
@@ -27,6 +32,16 @@ export default {
     UiIcon,
     UiBurger,
   },
+  data() {
+    return {
+      headerItems: [
+        { label: "Новости", route: "/news" },
+        { label: "Аукционы", route: "/auctions" },
+        { label: "Оформление заказа", route: "/orders" },
+        { label: "Профиль", route: "/profile" },
+      ],
+    };
+  },
 };
 </script>
 
@@ -34,28 +49,37 @@ export default {
 .header
     &__container
         height: 70px
-        background-color:$secondMainColor
-        color:$thirdMainColor
-        display flex
+        background-color: $secondMainColor
+        color: $thirdMainColor
+        display: flex
         align-items: center
-        justify-content space-between
+        justify-content: space-between
+
     &__logo
-        height 41px
+        height: 41px
+
     &__profile
-        height 49px
+        height: 49px
+
     &__list
-        display flex
-        align-items center
-        justify-content space-between
-        gap 6vw
+        display: flex
+        align-items: center
+        justify-content: space-between
+        gap: 6vw
+        padding: 0
+        margin: 0
+
     &__list-item
-      font-size 16px
-      text-transform uppercase
-      text-decoration none;
-      list-style-type none;
+        list-style-type: none
+
+    &__link
+        font-size: 16px
+        text-transform: uppercase
+        text-decoration: none
+        color: inherit
 
     &__right-block
-        display flex
-        align-items center
-        gap 20px
+        display: flex
+        align-items: center
+        gap: 20px
 </style>

@@ -6,7 +6,7 @@ import DefaultLayout from "./components/layout/DefaultLayout.vue";
 <template>
   <main>
     <DefaultLayout>
-      <Authozation />
+      <router-view />
     </DefaultLayout>
   </main>
 </template>
