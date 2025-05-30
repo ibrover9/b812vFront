@@ -3,6 +3,7 @@
     <UiHeaderPage :items="headerItems" />
     <MainSlider />
     <Updates />
+    <Advices />
   </div>
 </template>
 
@@ -10,6 +11,7 @@
 import MainSlider from "@/components/news/MainSlider.vue";
 import Updates from "@/components/news/Updates/Updates.vue";
 import UiHeaderPage from "@/components/ui/UiHeaderPage.vue";
+import Advices from "@/components/news/Advices.vue";
 
 const headerItems = [
   { label: "Последние обновления", targetId: "updates" },
