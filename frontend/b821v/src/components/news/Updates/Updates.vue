@@ -9,3 +9,8 @@ import UpdateFunctionality from "./UpdateFunctionality.vue";
     <UpdateAuctionConditions />
   </div>
 </template>
+
+<style lang="stylus">
+.upates
+  padding 80px 0
+</style>
