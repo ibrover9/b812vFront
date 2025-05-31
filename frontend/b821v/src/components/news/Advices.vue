@@ -1,9 +1,5 @@
 <template>
   <div class="news-advices main-wrapper">
-    <img
-      src="https://i.postimg.cc/vmNbMcm6/14dcf60baed49dbe5e284b56ffc073a9e2d58c0e.png"
-      alt="Описание картинки"
-    />
     <div class="news-advices__title">Советы по аукционам</div>
     <hr class="main-hr" />
     <div
