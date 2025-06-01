@@ -1,7 +1,9 @@
 <template class="header">
   <div>
     <div class="header__container main-wrapper">
-      <UiIcon name="logo-white" class="header__logo" />
+      <router-link to="/" class="header__logo">
+        <UiIcon name="logo-white" class="header__logo" />
+      </router-link>
       <ul class="header__list">
         <li
           v-for="item in headerItems"
@@ -14,7 +16,11 @@
         </li>
       </ul>
       <div class="header__right-block">
-        <UiIcon name="profile" class="header__profile" />
+        <UiIcon
+          name="profile"
+          class="header__profile"
+          @click="handleProfileClick"
+        />
         <UiBurger />
       </div>
     </div>
@@ -22,27 +28,22 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref } from "vue";
 import UiBurger from "../ui/UiBurger.vue";
 import UiIcon from "../ui/UiIcon.vue";
 
-export default {
-  name: "Header",
-  components: {
-    UiIcon,
-    UiBurger,
-  },
-  data() {
-    return {
-      headerItems: [
-        { label: "Новости", route: "/news" },
-        { label: "Аукционы", route: "/auctions" },
-        { label: "Оформление заказа", route: "/orders" },
-        { label: "Профиль", route: "/profile" },
-      ],
-    };
-  },
-};
+function handleProfileClick() {
+  console.log("Иконка профиля нажата");
+  // или вызывай любую внешнюю функцию
+}
+
+const headerItems = ref([
+  { label: "Новости", route: "/news" },
+  { label: "Аукционы", route: "/auctions" },
+  { label: "Оформление заказа", route: "/orders" },
+  { label: "Профиль", route: "/profile" },
+]);
 </script>
 
 <style lang="stylus">
