@@ -45,7 +45,9 @@ const showMore = () => {
 
 onMounted(async () => {
   try {
-    const response = await axios.get("http://localhost:8080/api/news-advice");
+    const response = await axios.get(
+      `${import.meta.env.VITE_API_URL}api/news-advice`
+    );
     newsAdvice.value = response.data;
   } catch (error) {
     console.error("Ошибка при загрузке данных:", error);

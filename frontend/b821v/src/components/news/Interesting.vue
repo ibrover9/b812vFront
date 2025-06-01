@@ -21,8 +21,6 @@
 
 <script setup>
 import { Swiper, SwiperSlide } from "swiper/vue";
-import { Navigation } from "swiper/modules";
-
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
@@ -34,7 +32,7 @@ const newsInteresting = ref([]);
 onMounted(async () => {
   try {
     const response = await axios.get(
-      "http://localhost:8080/api/news-interesting"
+      `${import.meta.env.VITE_API_URL}api/news-interesting`
     );
     newsInteresting.value = response.data;
     console.log(newsInteresting.value);
