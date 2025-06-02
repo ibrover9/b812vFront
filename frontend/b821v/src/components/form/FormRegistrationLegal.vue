@@ -79,7 +79,7 @@ function onSubmit() {
     margin-top 20px
 
     &__field
-        margin-bottom 16px
+        margin-bottom 20px
 
     &__field:last-child
         margin-bottom 24px

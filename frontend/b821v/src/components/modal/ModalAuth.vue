@@ -2,8 +2,14 @@
   <transition name="fade">
     <div v-if="modelValue" class="modal-auth__overlay" @click.self="closeModal">
       <transition name="fade-scale">
-        <div class="modal-auth__dialog" role="dialog" aria-modal="true">
+        <div
+          class="modal-auth__dialog"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="modalTitle"
+        >
           <header class="modal-auth__header">
+            <!-- Первая строка: переключатель Физическое / Юридическое -->
             <div class="modal-auth__tabs">
               <button
                 :class="[
@@ -11,30 +17,82 @@
                   { active: activeTab === 'individual' },
                 ]"
                 @click="switchTab('individual')"
+                id="tabIndividual"
+                aria-controls="contentIndividual"
               >
                 Физическое лицо
               </button>
               <button
                 :class="['modal-auth__tab', { active: activeTab === 'legal' }]"
                 @click="switchTab('legal')"
+                id="tabLegal"
+                aria-controls="contentLegal"
               >
                 Юридическое лицо
+              </button>
+            </div>
+
+            <!-- Вторая строка: переключатель Авторизация / Регистрация -->
+            <div class="modal-auth__modes">
+              <button
+                :class="[
+                  'modal-auth__mode-btn',
+                  { active: authMode === 'login' },
+                ]"
+                @click="switchMode('login')"
+                id="modeLogin"
+                aria-controls="formLogin"
+              >
+                Авторизация
+              </button>
+              <button
+                :class="[
+                  'modal-auth__mode-btn',
+                  { active: authMode === 'register' },
+                ]"
+                @click="switchMode('register')"
+                id="modeRegister"
+                aria-controls="formRegister"
+              >
+                Регистрация
               </button>
             </div>
           </header>
 
           <div class="modal-auth__body">
             <transition name="tab" mode="out-in">
-              <FormRegistrationIndividual
-                v-if="activeTab === 'individual'"
-                key="individual"
-                :form="formRegistration"
+              <!-- 4 возможных варианта форм -->
+              <!-- Физическое лицо / Авторизация -->
+              <FormAuthIndividual
+                v-if="activeTab === 'individual' && authMode === 'login'"
+                key="auth-individual"
+                :form="formIndividual"
                 @submit="submitForm"
               />
+
+              <!-- Физическое лицо / Регистрация -->
+              <FormRegistrationIndividual
+                v-else-if="
+                  activeTab === 'individual' && authMode === 'register'
+                "
+                key="reg-individual"
+                :form="formIndividual"
+                @submit="submitForm"
+              />
+
+              <!-- Юридическое лицо / Авторизация -->
+              <FormAuthLegal
+                v-else-if="activeTab === 'legal' && authMode === 'login'"
+                key="auth-legal"
+                :form="formLegal"
+                @submit="submitForm"
+              />
+
+              <!-- Юридическое лицо / Регистрация -->
               <FormRegistrationLegal
                 v-else
-                key="legal"
-                :form="formRegistration"
+                key="reg-legal"
+                :form="formLegal"
                 @submit="submitForm"
               />
             </transition>
@@ -46,8 +104,18 @@
 </template>
 
 <script setup>
-import { ref, reactive, defineProps, defineEmits } from "vue";
+import {
+  ref,
+  reactive,
+  defineProps,
+  defineEmits,
+  onMounted,
+  onBeforeUnmount,
+} from "vue";
+
+import FormAuthIndividual from "../form/FormAuthIndividual.vue";
 import FormRegistrationIndividual from "../form/FormRegistrationIndividual.vue";
+import FormAuthLegal from "../form/FormAuthLegal.vue";
 import FormRegistrationLegal from "../form/FormRegistrationLegal.vue";
 
 const props = defineProps({
@@ -59,7 +127,20 @@ const props = defineProps({
 
 const emit = defineEmits(["update:modelValue", "submit"]);
 
-const formRegistration = reactive({
+// Состояние, отвечающее за вкладки «Физическое / Юридическое»
+const activeTab = ref("individual");
+
+// Состояние, отвечающее за режим «Авторизация / Регистрация»
+const authMode = ref("register");
+
+// Разделяем данные форм для физического и юридического лиц
+const formIndividual = reactive({
+  email: "",
+  password: "",
+  confirmPassword: "",
+});
+
+const formLegal = reactive({
   email: "",
   password: "",
   confirmPassword: "",
@@ -67,41 +148,87 @@ const formRegistration = reactive({
   taxId: "",
 });
 
-const activeTab = ref("individual");
-
+// Переключение вкладок
 function switchTab(tab) {
   if (activeTab.value === tab) return;
   activeTab.value = tab;
+  // Сброс режима на «Регистрация» при смене вкладки (опционально)
+  authMode.value = "register";
 }
 
+// Переключение между Авторизацией и Регистрацией
+function switchMode(mode) {
+  if (authMode.value === mode) return;
+  authMode.value = mode;
+}
+
+// Закрытие модалки
 function closeModal() {
   emit("update:modelValue", false);
 }
 
+// Обработчик сабмита — в зависимости от таба и режима берем нужные поля
 function submitForm() {
-  if (formRegistration.password !== formRegistration.confirmPassword) {
+  // Ссылка на текущую форму
+  const currentForm = activeTab.value === "legal" ? formLegal : formIndividual;
+
+  // Простейшая проверка совпадения паролей в режиме регистрации
+  if (
+    authMode.value === "register" &&
+    currentForm.password !== currentForm.confirmPassword
+  ) {
     alert("Пароли не совпадают");
     return;
   }
-  emit("submit", {
-    type: activeTab.value,
-    email: formRegistration.email,
-    password: formRegistration.password,
-    ...(activeTab.value === "legal"
-      ? {
-          companyName: formRegistration.companyName,
-          taxId: formRegistration.taxId,
-        }
-      : {}),
-  });
 
-  formRegistration.email = "";
-  formRegistration.password = "";
-  formRegistration.confirmPassword = "";
-  formRegistration.companyName = "";
-  formRegistration.taxId = "";
+  // Формируем полезную нагрузку
+  const payload = {
+    type: activeTab.value, // 'individual' или 'legal'
+    mode: authMode.value, // 'login' или 'register'
+    email: currentForm.email,
+    password: currentForm.password,
+  };
+
+  if (activeTab.value === "legal" && authMode.value === "register") {
+    payload.companyName = formLegal.companyName;
+    payload.taxId = formLegal.taxId;
+  }
+
+  emit("submit", payload);
+
+  // Сброс полей после отправки (и авторизации, и регистрации)
+  resetForms();
   closeModal();
 }
+
+function resetForms() {
+  Object.assign(formIndividual, {
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+  Object.assign(formLegal, {
+    email: "",
+    password: "",
+    confirmPassword: "",
+    companyName: "",
+    taxId: "",
+  });
+}
+
+// Чтобы закрывать модалку по Escape
+function handleKeyDown(event) {
+  if (event.key === "Escape") {
+    closeModal();
+  }
+}
+
+onMounted(() => {
+  window.addEventListener("keydown", handleKeyDown);
+});
+onBeforeUnmount(() => {
+  window.removeEventListener("keydown", handleKeyDown);
+});
 </script>
 
 <style lang="stylus" scoped>
@@ -119,7 +246,7 @@ function submitForm() {
     z-index 1000
 
   &__dialog
-    background $thirdMainColor
+    background #fff
     border-radius 10px
     width 600px
     max-width 90%
@@ -131,6 +258,7 @@ function submitForm() {
     flex-direction column
     border-bottom 1px solid #e5e5e5
 
+  /* Вкладки «Физическое / Юридическое» */
   &__tabs
     display flex
 
@@ -145,20 +273,39 @@ function submitForm() {
     text-align center
     transition all 0.2s
 
-    // Состояние при наведении
-  &__tab:hover
-    background $fourthMainColor
+    &:hover
+      background rgba(0, 0, 0, 0.03)
 
-    // Активная вкладка
-  &__tab.active
-    border-bottom 2px solid $firstMainColor
-    font-weight 600
+    &.active
+      border-bottom 2px solid $firstMainColor
+      font-weight 600
 
+  /* Переключатель «Авторизация / Регистрация» */
+  &__modes
+    display flex
+    margin-top 10px
 
+  &__mode-btn
+    flex 1
+    padding 8px 0
+    background none
+    border none
+    font-size 18px
+    cursor pointer
+    text-align center
+    transition all 0.2s
+
+    &:hover
+      background rgba(0, 0, 0, 0.02)
+
+    &.active
+      border-bottom 2px solid $firstMainColor
+      font-weight 500
 
   &__body
-    padding 20px 80px
+    padding 20px 60px
 
+/* Анимации (оставляем ваши переходы) */
 .fade-enter-active,
 .fade-leave-active
   transition opacity 0.3s ease
