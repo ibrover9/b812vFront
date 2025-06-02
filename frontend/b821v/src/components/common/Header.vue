@@ -1,5 +1,6 @@
 <template class="header">
   <div>
+    <ModalAuth v-model="isModalVisible" @submit="handleRegister" />
     <div class="header__container main-wrapper">
       <router-link to="/" class="header__logo">
         <UiIcon name="logo-white" class="header__logo" />
@@ -16,11 +17,7 @@
         </li>
       </ul>
       <div class="header__right-block">
-        <UiIcon
-          name="profile"
-          class="header__profile"
-          @click="handleProfileClick"
-        />
+        <UiIcon name="profile" class="header__profile" @click="openModal" />
         <UiBurger />
       </div>
     </div>
@@ -32,10 +29,16 @@
 import { ref } from "vue";
 import UiBurger from "../ui/UiBurger.vue";
 import UiIcon from "../ui/UiIcon.vue";
+import ModalAuth from "../modal/ModalAuth.vue";
 
-function handleProfileClick() {
-  console.log("Иконка профиля нажата");
-  // или вызывай любую внешнюю функцию
+const isModalVisible = ref(false);
+
+function openModal() {
+  isModalVisible.value = true;
+}
+
+function handleRegister(formData) {
+  console.log("Данные для регистрации:", formData);
 }
 
 const headerItems = ref([
