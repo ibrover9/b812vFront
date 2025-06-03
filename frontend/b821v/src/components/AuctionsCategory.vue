@@ -109,9 +109,9 @@
         width 28.65vw
         right 80px
         top 0
-.first-string__layer
+.auctions-category__layer
   transition filter 0.3s ease // Плавность анимации
 
-.first-string__layer:hover
+.auctions-category__layer:hover
   filter brightness(50%) // Затемнение
 </style>
