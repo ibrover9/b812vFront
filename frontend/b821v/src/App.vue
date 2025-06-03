@@ -1,5 +1,4 @@
 <script setup>
-import Authozation from "./views/Authorization.vue";
 import DefaultLayout from "./components/layout/DefaultLayout.vue";
 </script>
 

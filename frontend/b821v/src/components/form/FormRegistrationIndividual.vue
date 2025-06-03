@@ -12,6 +12,15 @@
 
     <div class="form-reg-user__field">
       <input
+        placeholder="+7 (999) 999-99-99"
+        class="form-reg-user__input"
+        v-model="form.phone"
+        type="phone"
+        required
+      />
+    </div>
+    <div class="form-reg-user__field">
+      <input
         placeholder="password"
         v-model="form.password"
         class="form-reg-user__input"

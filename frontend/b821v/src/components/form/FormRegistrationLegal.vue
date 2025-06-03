@@ -12,6 +12,16 @@
 
     <div class="form-reg-copany__field">
       <input
+        placeholder="+7 (999) 999-99-99"
+        v-model="form.phone"
+        class="form-reg-copany__input"
+        type="phone"
+        required
+      />
+    </div>
+
+    <div class="form-reg-copany__field">
+      <input
         placeholder="сompany-name"
         v-model="form.companyName"
         class="form-reg-copany__input"

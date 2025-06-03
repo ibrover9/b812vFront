@@ -5,7 +5,6 @@
         class="form-auth-company__input"
         v-model="form.email"
         type="email"
-        id="email"
         required
       />
     </div>
@@ -15,7 +14,6 @@
         class="form-auth-company__input"
         v-model="form.password"
         type="password"
-        id="password"
         required
       />
     </div>

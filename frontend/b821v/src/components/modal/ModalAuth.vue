@@ -136,12 +136,14 @@ const authMode = ref("register");
 // Разделяем данные форм для физического и юридического лиц
 const formIndividual = reactive({
   email: "",
+  phone: "",
   password: "",
   confirmPassword: "",
 });
 
 const formLegal = reactive({
   email: "",
+  phone: "",
   password: "",
   confirmPassword: "",
   companyName: "",
