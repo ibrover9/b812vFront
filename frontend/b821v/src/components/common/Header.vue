@@ -43,7 +43,7 @@ function handleRegister(formData) {
 
 const headerItems = ref([
   { label: "Новости", route: "/news" },
-  { label: "Аукционы", route: "/auctions" },
+  { label: "Аукционы", route: "/auctions-categories" },
   { label: "Оформление заказа", route: "/orders" },
   { label: "Профиль", route: "/profile" },
 ]);

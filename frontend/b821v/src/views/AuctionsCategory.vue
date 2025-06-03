@@ -1,80 +1,103 @@
 <template>
   <div class="auctions-category">
-    <div class="auctions-category__string">
+    <div class="first-string">
       <!-- Левый «трапеция»-кусочек -->
       <img
         src="/src/assets/img/auctionGallary/gallary1cut.png"
         alt="Left trapezoid"
-        class="auctions-category__layer auctions-category__one-left"
+        class="first-string__layer first-string__one-left"
       />
 
       <img
         src="/src/assets/img/auctionGallary/gallary2cut.png"
         alt="Center parallelogram"
-        class="auctions-category__layer auctions-category__one-center"
+        class="first-string__layer first-string__one-center"
       />
 
       <!-- Правый «трапеция»-кусочек (зеркально) -->
       <img
         src="/src/assets/img/auctionGallary/gallary3cut.png"
         alt="Right trapezoid"
-        class="auctions-category__layer auctions-category__one-right"
+        class="first-string__layer first-string__one-right"
       />
     </div>
-    <div class="auctions-category__string">
+    <div class="first-string">
       <!-- Левый «трапеция»-кусочек -->
       <img
         src="/src/assets/img/auctionGallary/gallary4cut.png"
         alt="Left trapezoid"
-        class="auctions-category__layer auctions-category__two-left"
+        class="first-string__layer first-string__two-left"
       />
 
       <img
         src="/src/assets/img/auctionGallary/gallary5cut.png"
         alt="Center parallelogram"
-        class="auctions-category__layer auctions-category__two-center"
+        class="first-string__layer first-string__two-center"
       />
 
       <!-- Правый «трапеция»-кусочек (зеркально) -->
       <img
         src="/src/assets/img/auctionGallary/gallary6cut.png"
         alt="Right trapezoid"
-        class="auctions-category__layer auctions-category__two-right"
+        class="first-string__layer first-string__two-right"
       />
     </div>
-    <div class="auctions-category__string">
+    <div class="first-string">
       <!-- Левый «трапеция»-кусочек -->
       <img
         src="/src/assets/img/auctionGallary/gallary7cut.png"
         alt="Left trapezoid"
-        class="auctions-category__layer auctions-category__three-left"
+        class="first-string__layer first-string__three-left"
       />
 
       <img
         src="/src/assets/img/auctionGallary/gallary8cut.png"
         alt="Center parallelogram"
-        class="auctions-category__layer auctions-category__three-center"
+        class="first-string__layer first-string__three-center"
       />
 
       <!-- Правый «трапеция»-кусочек (зеркально) -->
       <img
         src="/src/assets/img/auctionGallary/gallary9cut.png"
         alt="Right trapezoid"
-        class="auctions-category__layer auctions-category__three-right"
+        class="first-string__layer first-string__three-right"
       />
     </div>
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+const props = defineProps({
+  srcLeft: {
+    type: String,
+    required: true,
+  },
+  srcCenter: {
+    type: String,
+    required: true,
+  },
+  srcRight: {
+    type: String,
+    required: true,
+  },
+  width: {
+    type: Number,
+    default: 540,
+  },
+  height: {
+    type: Number,
+    default: 300,
+  },
+});
+</script>
 
 <style lang="stylus" scoped>
 .auctions-category
-    padding 40px 0
-    background-color $secondMainColor
-    &__string
-        position relative
-        height 160px
+  padding 40px 0
+  background-color $secondMainColor
+.first-string
+    position relative
+    height 160px
     &__layer
         position absolute
         width 20vw
