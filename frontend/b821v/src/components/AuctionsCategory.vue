@@ -1,7 +1,6 @@
 <template>
   <div class="auctions-category">
     <div class="auctions-category__string">
-      <!-- Левый «трапеция»-кусочек -->
       <img
         src="/src/assets/img/auctionGallary/gallary1cut.png"
         alt="Left trapezoid"
@@ -14,7 +13,6 @@
         class="auctions-category__layer auctions-category__one-center"
       />
 
-      <!-- Правый «трапеция»-кусочек (зеркально) -->
       <img
         src="/src/assets/img/auctionGallary/gallary3cut.png"
         alt="Right trapezoid"
@@ -22,7 +20,6 @@
       />
     </div>
     <div class="auctions-category__string">
-      <!-- Левый «трапеция»-кусочек -->
       <img
         src="/src/assets/img/auctionGallary/gallary4cut.png"
         alt="Left trapezoid"
@@ -35,7 +32,6 @@
         class="auctions-category__layer auctions-category__two-center"
       />
 
-      <!-- Правый «трапеция»-кусочек (зеркально) -->
       <img
         src="/src/assets/img/auctionGallary/gallary6cut.png"
         alt="Right trapezoid"
@@ -43,7 +39,6 @@
       />
     </div>
     <div class="auctions-category__string">
-      <!-- Левый «трапеция»-кусочек -->
       <img
         src="/src/assets/img/auctionGallary/gallary7cut.png"
         alt="Left trapezoid"
@@ -56,7 +51,6 @@
         class="auctions-category__layer auctions-category__three-center"
       />
 
-      <!-- Правый «трапеция»-кусочек (зеркально) -->
       <img
         src="/src/assets/img/auctionGallary/gallary9cut.png"
         alt="Right trapezoid"
