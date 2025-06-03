@@ -110,8 +110,8 @@
         right 80px
         top 0
 .auctions-category__layer
-  transition filter 0.3s ease // Плавность анимации
+  transition filter 0.3s ease
 
 .auctions-category__layer:hover
-  filter brightness(50%) // Затемнение
+  filter brightness(50%)
 </style>
