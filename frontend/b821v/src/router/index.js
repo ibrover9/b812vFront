@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import News from "@/views/News.vue";
-import AuctionsCategory from "@/views/Auctions.vue";
+import AuctionsCategory from "@/views/AuctionsCategory.vue";
 
 const routes = [
   {
@@ -15,7 +15,7 @@ const routes = [
   },
   {
     path: "/auctions-categories",
-    name: "Auctions",
+    name: "AuctionsCategory",
     component: AuctionsCategory,
   },
 ];
