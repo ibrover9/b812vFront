@@ -1,7 +1,11 @@
 <template>
   <div class="main-wrapper auctions">
     <h1 class="auctions__title">{{ categoryText }}</h1>
-    <AuctionCard />
+    <div class="auctions__main">
+      <AuctionCard />
+      <AuctionCard />
+      <AuctionCard />
+    </div>
   </div>
 </template>
 
@@ -27,6 +31,13 @@ const categoryText = categoryMap[props.id] || "Категория не найд�
 <style lang="stylus">
 .auctions
     &__title
+        margin-top 40px
+        margin-bottom 20px
         font-size 48px
         text-transform uppercase
+        font-family "PlayfairDisplaySC"
+    &__main
+        display flex
+        flex-direction column
+        gap 20px
 </style>
