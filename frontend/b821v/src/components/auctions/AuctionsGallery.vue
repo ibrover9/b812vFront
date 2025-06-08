@@ -1,7 +1,10 @@
 <template>
   <div class="auctions-category">
     <div class="auctions-category__string">
-      <div class="image-wrapper auctions-category__one-left">
+      <div
+        class="image-wrapper auctions-category__one-left"
+        @click="navigateToCategory('sport')"
+      >
         <img
           src="/src/assets/img/auctionGallary/gallary1cut.png"
           alt="Left trapezoid"
@@ -9,7 +12,10 @@
         />
         <div class="image-text">спорт</div>
       </div>
-      <div class="image-wrapper auctions-category__one-center">
+      <div
+        class="image-wrapper auctions-category__one-center"
+        @click="navigateToCategory('premium')"
+      >
         <img
           src="/src/assets/img/auctionGallary/gallary2cut.png"
           alt="Center parallelogram"
@@ -17,7 +23,10 @@
         />
         <div class="image-text">премиум</div>
       </div>
-      <div class="image-wrapper auctions-category__one-right">
+      <div
+        class="image-wrapper auctions-category__one-right"
+        @click="navigateToCategory('germans')"
+      >
         <img
           src="/src/assets/img/auctionGallary/gallary3cut.png"
           alt="Right trapezoid"
@@ -28,7 +37,10 @@
     </div>
 
     <div class="auctions-category__string">
-      <div class="image-wrapper auctions-category__two-left">
+      <div
+        class="image-wrapper auctions-category__two-left"
+        @click="navigateToCategory('suv')"
+      >
         <img
           src="/src/assets/img/auctionGallary/gallary4cut.png"
           alt="Left trapezoid"
@@ -36,7 +48,10 @@
         />
         <div class="image-text">внедорожники</div>
       </div>
-      <div class="image-wrapper auctions-category__two-center">
+      <div
+        class="image-wrapper auctions-category__two-center"
+        @click="navigateToCategory('family')"
+      >
         <img
           src="/src/assets/img/auctionGallary/gallary5cut.png"
           alt="Center parallelogram"
@@ -44,7 +59,10 @@
         />
         <div class="image-text">для семьи</div>
       </div>
-      <div class="image-wrapper auctions-category__two-right">
+      <div
+        class="image-wrapper auctions-category__two-right"
+        @click="navigateToCategory('chinese')"
+      >
         <img
           src="/src/assets/img/auctionGallary/gallary6cut.png"
           alt="Right trapezoid"
@@ -55,7 +73,10 @@
     </div>
 
     <div class="auctions-category__string">
-      <div class="image-wrapper auctions-category__three-left">
+      <div
+        class="image-wrapper auctions-category__three-left"
+        @click="navigateToCategory('japanese')"
+      >
         <img
           src="/src/assets/img/auctionGallary/gallary7cut.png"
           alt="Left trapezoid"
@@ -63,7 +84,10 @@
         />
         <div class="image-text">японцы</div>
       </div>
-      <div class="image-wrapper auctions-category__three-center">
+      <div
+        class="image-wrapper auctions-category__three-center"
+        @click="navigateToCategory('russian')"
+      >
         <img
           src="/src/assets/img/auctionGallary/gallary8cut.png"
           alt="Center parallelogram"
@@ -71,7 +95,10 @@
         />
         <div class="image-text">русские</div>
       </div>
-      <div class="image-wrapper auctions-category__three-right">
+      <div
+        class="image-wrapper auctions-category__three-right"
+        @click="navigateToCategory('electric')"
+      >
         <img
           src="/src/assets/img/auctionGallary/gallary9cut.png"
           alt="Right trapezoid"
@@ -83,7 +110,15 @@
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+
+function navigateToCategory(category) {
+  router.push(`/auctions/${category}`);
+}
+</script>
 
 <style lang="stylus" scoped>
 .auctions-category
@@ -108,6 +143,7 @@
   height 150px
   width 20vw
   overflow hidden
+  cursor pointer
 
   &:hover .image-text
     opacity 1
@@ -120,7 +156,6 @@
   color white
   font-size 40px
   font-weight 700
-
   text-align center
   text-transform uppercase
   pointer-events none

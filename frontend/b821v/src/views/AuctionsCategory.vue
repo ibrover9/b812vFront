@@ -3,5 +3,5 @@
 </template>
 
 <script setup>
-import AuctionsGallery from "../components/AuctionsGallery.vue";
+import AuctionsGallery from "../components/auctions/AuctionsGallery.vue";
 </script>
