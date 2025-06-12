@@ -5,6 +5,7 @@ export const useUserStore = defineStore("user", () => {
   // Состояние
   const name = ref("");
   const email = ref("");
+  const role = ref("");
   const token = ref("");
   const isLoggedIn = computed(() => !!token.value); // по токену
 
@@ -16,10 +17,10 @@ export const useUserStore = defineStore("user", () => {
   }));
 
   // Действия
-  function login({ name: userName, email: userEmail, token: userToken }) {
-    name.value = userName;
-    email.value = userEmail;
-    token.value = userToken;
+  function login(data) {
+    role.value = data.user.role || "";
+    email.value = data.user.email || "";
+    token.value = data.token || "";
   }
 
   function logout() {
@@ -32,6 +33,7 @@ export const useUserStore = defineStore("user", () => {
     name,
     email,
     token,
+    role,
     isLoggedIn,
     userInfo,
     login,

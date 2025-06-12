@@ -1,5 +1,5 @@
 <template>
-  <form class="form-reg-copany" @submit.prevent="onSubmit">
+  <form class="form-reg-copany">
     <div class="form-reg-copany__field">
       <input
         placeholder="example@mail.com"
@@ -12,8 +12,9 @@
 
     <div class="form-reg-copany__field">
       <input
-        placeholder="+7 (999) 999-99-99"
+        placeholder="+7 (___) ___-__-__"
         v-model="form.phone"
+        v-mask="'+7 (###) ###-##-##'"
         class="form-reg-copany__input"
         type="phone"
         required
@@ -59,7 +60,7 @@
         required
       />
     </div>
-    <UiButton class="form-reg-copany__button" size="lg" @click="handleClick">
+    <UiButton class="form-reg-copany__button" size="lg" @click="onSubmit">
       Зарегистрироваться
     </UiButton>
     <!-- <button type="submit" class="modal-auth__submit">Зарегистрироваться</button> -->

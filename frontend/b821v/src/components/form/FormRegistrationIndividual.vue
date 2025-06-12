@@ -1,5 +1,5 @@
 <template>
-  <form class="form-reg-user" @submit.prevent="onSubmit">
+  <form class="form-reg-user">
     <div class="form-reg-user__field">
       <input
         placeholder="example@mail.com"
@@ -12,9 +12,10 @@
 
     <div class="form-reg-user__field">
       <input
-        placeholder="+7 (999) 999-99-99"
+        placeholder="+7 (___) ___-__-__"
         class="form-reg-user__input"
         v-model="form.phone"
+        v-mask="'+7 (###) ###-##-##'"
         type="phone"
         required
       />
@@ -48,7 +49,7 @@
         required
       />
     </div>
-    <UiButton class="form-reg-user__button" size="lg" @click="handleClick">
+    <UiButton class="form-reg-user__button" size="lg" @click="onSubmit">
       Зарегистрироваться
     </UiButton>
     <!-- Кнопка «Отправить» можно убрать из сюда, так как вызывается сверху -->

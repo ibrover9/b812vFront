@@ -113,10 +113,12 @@ import {
   onBeforeUnmount,
 } from "vue";
 
-import FormAuthIndividual from "../form/FormAuthIndividual.vue";
+import FormAuthIndividual from "/src/components/form/FormAuthIndividual.vue";
 import FormRegistrationIndividual from "../form/FormRegistrationIndividual.vue";
 import FormAuthLegal from "../form/FormAuthLegal.vue";
 import FormRegistrationLegal from "../form/FormRegistrationLegal.vue";
+import axios from "axios";
+import { useUserStore } from "@/stores/user.js";
 
 const props = defineProps({
   modelValue: {
@@ -127,11 +129,15 @@ const props = defineProps({
 
 const emit = defineEmits(["update:modelValue", "submit"]);
 
+const isSubmitting = ref(false);
+
 // Состояние, отвечающее за вкладки «Физическое / Юридическое»
 const activeTab = ref("individual");
 
 // Состояние, отвечающее за режим «Авторизация / Регистрация»
 const authMode = ref("login");
+
+const userStore = useUserStore();
 
 // Разделяем данные форм для физического и юридического лиц
 const formIndividual = reactive({
@@ -170,23 +176,23 @@ function closeModal() {
 }
 
 // Обработчик сабмита — в зависимости от таба и режима берем нужные поля
-function submitForm() {
-  // Ссылка на текущую форму
+async function submitForm() {
+  if (isSubmitting.value) return; // блок повторного нажатия
+  isSubmitting.value = true;
+
   const currentForm = activeTab.value === "legal" ? formLegal : formIndividual;
 
-  // Простейшая проверка совпадения паролей в режиме регистрации
   if (
     authMode.value === "register" &&
     currentForm.password !== currentForm.confirmPassword
   ) {
     alert("Пароли не совпадают");
+    isSubmitting.value = false;
     return;
   }
 
-  // Формируем полезную нагрузку
   const payload = {
-    type: activeTab.value, // 'individual' или 'legal'
-    mode: authMode.value, // 'login' или 'register'
+    role: activeTab.value === "legal" ? "company" : "user",
     email: currentForm.email,
     password: currentForm.password,
   };
@@ -196,11 +202,25 @@ function submitForm() {
     payload.taxId = formLegal.taxId;
   }
 
-  emit("submit", payload);
-
-  // Сброс полей после отправки (и авторизации, и регистрации)
-  resetForms();
-  closeModal();
+  try {
+    let response;
+    if (authMode.value === "register") {
+      response = await registerUser(payload);
+    } else {
+      response = await loginUser(payload);
+    }
+    userStore.login(response);
+    resetForms();
+    closeModal();
+  } catch (error) {
+    if (error.response?.status === 429) {
+      alert("Слишком много попыток. Подождите немного и попробуйте снова.");
+    } else {
+      alert("Произошла ошибка. Проверьте данные и повторите попытку.");
+    }
+  } finally {
+    isSubmitting.value = false;
+  }
 }
 
 function resetForms() {
@@ -222,6 +242,46 @@ function resetForms() {
 function handleKeyDown(event) {
   if (event.key === "Escape") {
     closeModal();
+  }
+}
+
+const dataUser = ref([]);
+
+async function registerUser(payload) {
+  try {
+    const response = await axios.post(
+      `${import.meta.env.VITE_API_URL}api/auth/register`, // замените на реальный endpoint
+      payload,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    console.log("Регистрация успешна:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Ошибка при регистрации:", error);
+    throw error;
+  }
+}
+
+async function loginUser(payload) {
+  try {
+    const response = await axios.post(
+      `${import.meta.env.VITE_API_URL}api/auth/login`, // замените на реальный endpoint
+      payload,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    console.log("Авторизация успешна:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Ошибка при авторизации:", error);
+    throw error;
   }
 }
 

@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="handleSubmit" class="form">
+  <form class="form" @submit.prevent="handleSubmit">
     <div class="form-auth-company__group">
       <input
         class="form-auth-company__input"
@@ -18,9 +18,7 @@
       />
     </div>
 
-    <UiButton class="form-auth-company__button" size="lg" @click="handleClick">
-      Войти
-    </UiButton>
+    <UiButton class="form-auth-company__button" size="lg"> Войти </UiButton>
   </form>
 </template>
 

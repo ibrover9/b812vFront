@@ -1,6 +1,6 @@
 <template class="header">
   <div>
-    <ModalAuth v-model="isModalVisible" @submit="handleRegister" />
+    <ModalAuth v-model="isModalVisible" />
     <div class="header__container main-wrapper">
       <router-link to="/" class="header__logo">
         <UiIcon name="logo-white" class="header__logo" />
@@ -35,10 +35,6 @@ const isModalVisible = ref(false);
 
 function openModal() {
   isModalVisible.value = true;
-}
-
-function handleRegister(formData) {
-  console.log("Данные для регистрации:", formData);
 }
 
 const headerItems = ref([
