@@ -131,7 +131,7 @@ const emit = defineEmits(["update:modelValue", "submit"]);
 const activeTab = ref("individual");
 
 // Состояние, отвечающее за режим «Авторизация / Регистрация»
-const authMode = ref("register");
+const authMode = ref("login");
 
 // Разделяем данные форм для физического и юридического лиц
 const formIndividual = reactive({
@@ -155,7 +155,7 @@ function switchTab(tab) {
   if (activeTab.value === tab) return;
   activeTab.value = tab;
   // Сброс режима на «Регистрация» при смене вкладки (опционально)
-  authMode.value = "register";
+  authMode.value = "login";
 }
 
 // Переключение между Авторизацией и Регистрацией
