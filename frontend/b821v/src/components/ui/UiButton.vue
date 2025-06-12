@@ -63,6 +63,7 @@ const variantModifier = {
   outline: "button--variant-outline",
   ghost: "button--variant-ghost",
   destructive: "button--variant-destructive",
+  redGhost: "button--variant-red-ghost",
 };
 
 const disabledModifier = "button--disabled";
@@ -135,6 +136,15 @@ const buttonClasses = computed(() => {
   border 1px solid $inconspicuousColor
   &:hover:not(.button--disabled)
     background-color $firstMainColor
+    border 1px solid $secondMainColor
+    color $secondMainColor
+.button--variant-red-ghost
+  width 200px
+  background-color transparent
+  color $inconspicuousColor
+  border 1px solid $inconspicuousColor
+  &:hover:not(.button--disabled)
+    background-color $redStandartColor
     border 1px solid $secondMainColor
     color $secondMainColor
 

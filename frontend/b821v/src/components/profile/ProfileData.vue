@@ -8,6 +8,7 @@
         alt=""
       />
       <UiButton variant="ghost" size="lg"> Редактировать </UiButton>
+      <UiButton variant="redGhost" size="lg"> Выйти </UiButton>
     </div>
   </div>
 </template>
