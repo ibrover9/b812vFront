@@ -131,9 +131,12 @@ const buttonClasses = computed(() => {
 
 .button--variant-ghost
   background-color transparent
-  color #2563eb
+  color $inconspicuousColor
+  border 1px solid $inconspicuousColor
   &:hover:not(.button--disabled)
-    background-color #e0f2fe
+    background-color $firstMainColor
+    border 1px solid $secondMainColor
+    color $secondMainColor
 
 .button--variant-destructive
   background-color #dc2626

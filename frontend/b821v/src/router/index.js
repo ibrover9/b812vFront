@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import News from "@/views/News.vue";
 import AuctionsCategory from "@/views/AuctionsCategory.vue";
 import Auctions from "@/views/Auctions.vue";
+import Profile from "@/views/Profile.vue";
 
 const routes = [
   {
@@ -23,6 +24,18 @@ const routes = [
     path: "/auctions/:id",
     name: "NewsDetail",
     component: Auctions,
+    props: true,
+  },
+  {
+    path: "/auctions/:id",
+    name: "NewsDetail",
+    component: Auctions,
+    props: true,
+  },
+  {
+    path: "/profile/",
+    name: "Profile",
+    component: Profile,
     props: true,
   },
 ];
