@@ -60,15 +60,39 @@
         required
       />
     </div>
+
+    <!-- Добавленные переключатели -->
+    <div class="form-reg-copany__toggles">
+      <label class="form-reg-copany__toggle-switch">
+        <input
+          type="checkbox"
+          v-model="agreeTerms"
+          class="form-reg-copany__toggle-checkbox"
+        />
+        <span class="form-reg-copany__slider"></span>
+        <span class="form-reg-copany__label-text">Согласие с условиями</span>
+      </label>
+
+      <label class="form-reg-copany__toggle-switch">
+        <input
+          type="checkbox"
+          v-model="isAuthorizedPerson"
+          class="form-reg-copany__toggle-checkbox"
+        />
+        <span class="form-reg-copany__slider"></span>
+        <span class="form-reg-copany__label-text">Уполномоченное лицо</span>
+      </label>
+    </div>
+
     <UiButton class="form-reg-copany__button" size="lg" @click="onSubmit">
       Зарегистрироваться
     </UiButton>
-    <!-- <button type="submit" class="modal-auth__submit">Зарегистрироваться</button> -->
   </form>
 </template>
 
+<
 <script setup>
-import { defineProps, defineEmits } from "vue";
+import { defineProps, defineEmits, ref } from "vue";
 import UiButton from "/src/components/ui/UiButton.vue";
 
 const props = defineProps({
@@ -77,43 +101,104 @@ const props = defineProps({
 
 const emit = defineEmits(["submit"]);
 
+const agreeTerms = ref(false);
+const isAuthorizedPerson = ref(false);
+
 function onSubmit() {
-  // Прокидываем событие вверх
-  emit("submit");
+  if (props.form.password !== props.form.confirmPassword) {
+    alert("Пароли не совпадают");
+    return;
+  }
+
+  emit("submit", {
+    ...props.form,
+    agreeTerms: agreeTerms.value,
+    isAuthorizedPerson: isAuthorizedPerson.value,
+  });
 }
 </script>
 
 <style lang="stylus" scoped>
 .form-reg-copany
+  display flex
+  flex-direction column
+  margin-top 20px
+
+  &__field
+    margin-bottom 20px
+
+  &__field:last-child
+    margin-bottom 24px
+
+  &__label
+    display block
+    margin-bottom 6px
+    font-size 0.875rem
+    color #333
+
+  &__input
+    width 95%
+    padding 8px 12px
+    font-size 18px
+    border 1px solid #ccc
+    border-radius 4px
+    outline none
+    transition border-color 0.2s
+
+  &__input:focus
+    border-color #66afe9
+
+  &__button
+    margin-top 20px
+    display flex
+    justify-content center
+
+  &__toggles
     display flex
     flex-direction column
-    margin-top 20px
+    gap 16px
+    margin-bottom 20px
 
-    &__field
-        margin-bottom 20px
+  &__toggle-switch
+    position relative
+    display flex
+    align-items center
+    cursor pointer
+    user-select none
 
-    &__field:last-child
-        margin-bottom 24px
+  &__toggle-checkbox
+    position absolute
+    opacity 0
+    width 0
+    height 0
 
-    &__label
-        display block
-        margin-bottom 6px
-        font-size 0.875rem
-        color #333
+  &__slider
+    position relative
+    width 40px
+    height 20px
+    background-color #ccc
+    border-radius 34px
+    margin-right 12px
+    transition 0.3s
 
-    &__input
-        width 95%
-        padding 8px 12px
-        font-size 18px
-        border 1px solid #ccc
-        border-radius 4px
-        outline none
-        transition border-color 0.2s
+    &::before
+      content ''
+      position absolute
+      height 16px
+      width 16px
+      left 2px
+      bottom 2px
+      background-color $secondMainColor
+      border-radius 50%
+      transition 0.3s
 
-    &__input:focus
-        border-color #66afe9
-    &__button
-        margin-top 20px
-        display flex
-        justify-content center
+  &__toggle-checkbox:checked + &__slider
+    background-color $firstMainColor
+
+    &::before
+      transform translateX(20px)
+
+  &__label-text
+    font-size 16px
+    color #333
 </style>
