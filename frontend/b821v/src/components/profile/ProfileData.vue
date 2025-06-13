@@ -8,7 +8,9 @@
         alt=""
       />
       <UiButton variant="ghost" size="lg"> Редактировать </UiButton>
-      <UiButton variant="redGhost" size="lg"> Выйти </UiButton>
+      <UiButton variant="redGhost" size="lg" @click="handleLogout">
+        Выйти
+      </UiButton>
     </div>
   </div>
 </template>
@@ -16,6 +18,17 @@
 <script setup>
 import FormProfile from "/src/components/form/FormProfile.vue";
 import UiButton from "/src/components/ui/UiButton.vue";
+import { useUserStore } from "@/stores/user.js";
+import { useRouter } from "vue-router";
+const router = useRouter();
+
+const userStore = useUserStore();
+
+function handleLogout() {
+  console.log("logout");
+  userStore.logout();
+  router.push("/news");
+}
 </script>
 
 <style lang="stylus">
