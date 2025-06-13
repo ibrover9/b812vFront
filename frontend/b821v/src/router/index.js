@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+import { useUserStore } from "@/stores/user";
 import News from "@/views/News.vue";
 import AuctionsCategory from "@/views/AuctionsCategory.vue";
 import Auctions from "@/views/Auctions.vue";
@@ -19,30 +20,37 @@ const routes = [
     path: "/auctions-categories",
     name: "AuctionsCategory",
     component: AuctionsCategory,
+    meta: { requiresAuth: true },
   },
   {
     path: "/auctions/:id",
-    name: "NewsDetail",
+    name: "AuctionDetail",
     component: Auctions,
     props: true,
+    meta: { requiresAuth: true },
   },
   {
-    path: "/auctions/:id",
-    name: "NewsDetail",
-    component: Auctions,
-    props: true,
-  },
-  {
-    path: "/profile/",
+    path: "/profile",
     name: "Profile",
     component: Profile,
     props: true,
+    meta: { requiresAuth: true },
   },
 ];
 
 const router = createRouter({
   history: createWebHistory(),
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  const userStore = useUserStore();
+
+  if (to.meta.requiresAuth && !userStore.isLoggedIn) {
+    next({ name: "News" });
+  } else {
+    next();
+  }
 });
 
 export default router;
