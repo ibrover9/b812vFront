@@ -1,58 +1,64 @@
 <template>
   <div class="form-profile-editing">
-    <div class="form-profile-editing__string">
-      <strong class="form-profile-editing__title">Название компании</strong>
-      <p class="form-profile-editing__text">Пирожок</p>
-    </div>
-    <hr class="main-hr" />
-    <div class="form-profile-editing__string">
-      <strong class="form-profile-editing__title">Email</strong>
-      <p class="form-profile-editing__text">artur.artemov@bk.ru</p>
-    </div>
-    <hr class="main-hr" />
-    <div class="form-profile-editing__string">
-      <strong class="form-profile-editing__title">ИНН</strong>
-      <p class="form-profile-editing__text">527005589999</p>
-    </div>
-    <hr class="main-hr" />
-    <div class="form-profile-editing__string">
-      <strong class="form-profile-editing__title">Номер телефона</strong>
-      <p class="form-profile-editing__text">+7 (999) 999-99-99</p>
-    </div>
-    <hr class="main-hr" />
-    <div class="form-profile-editing__string">
-      <strong class="form-profile-editing__title">Название компании</strong>
-      <p class="form-profile-editing__text">Пирожок</p>
-    </div>
-    <hr class="main-hr" />
-    <div class="form-profile-editing__string">
-      <strong class="form-profile-editing__title">Название компании</strong>
-      <p class="form-profile-editing__text">Пирожок</p>
-    </div>
-    <hr class="main-hr" />
+    <template v-for="(field, index) in fields" :key="index">
+      <div class="form-profile-editing__string">
+        <strong class="form-profile-editing__title">{{ field.label }}</strong>
+        <p class="form-profile-editing__text">{{ field.value }}</p>
+      </div>
+      <hr class="main-hr" v-if="index < fields.length - 1" />
+    </template>
   </div>
 </template>
+
+<script setup>
+import { computed } from "vue";
+import { useUserStore } from "@/stores/user";
+
+const userStore = useUserStore();
+
+const fields = computed(() => {
+  if (userStore.role === "company") {
+    return [
+      { label: "Роль", value: userStore.role },
+      { label: "Email", value: userStore.email },
+      { label: "Номер телефона", value: userStore.phone },
+      { label: "ИНН", value: userStore.inn },
+      { label: "ФИО представителя", value: userStore.representativeFullName },
+      {
+        label: "Email подтверждён",
+        value: userStore.emailVerified ? "Да" : "Нет",
+      },
+    ];
+  } else {
+    return [
+      { label: "Роль", value: userStore.role },
+      { label: "Имя", value: userStore.firstName },
+      { label: "Фамилия", value: userStore.lastName },
+      { label: "Email", value: userStore.email },
+      { label: "Номер телефона", value: userStore.phone },
+      {
+        label: "Email подтверждён",
+        value: userStore.emailVerified ? "Да" : "Нет",
+      },
+    ];
+  }
+});
+</script>
 
 <style lang="stylus">
 .form-profile-editing
   &__string
-    /* базовые стили */
     display grid
     grid-template-columns 1fr 1fr
     padding 20px 10px
     font-size 28px
     background-color white
     border-radius 6px
-    /* чтобы масштабирование было ровно из центра */
     transform-origin center center
-    /* плавный переход */
     transition transform 0.3s ease, box-shadow 0.3s ease
-
-    /* тень для объёма */
-
+    box-shadow 0 2px 4px rgba(0, 0, 0, 0.1)
 
     &:hover
-      /* чуть увеличиваем */
       transform scale(1.05)
-      /* усиливаем тень */
+      box-shadow 0 4px 8px rgba(0, 0, 0, 0.2)
 </style>
