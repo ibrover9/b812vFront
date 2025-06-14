@@ -2,6 +2,24 @@
   <form class="form-reg-user" @submit.prevent="onSubmit">
     <div class="form-reg-user__field">
       <input
+        placeholder="first name"
+        v-model="form.firstName"
+        class="form-reg-user__input"
+        type="text"
+        required
+      />
+    </div>
+    <div class="form-reg-user__field">
+      <input
+        placeholder="last name"
+        v-model="form.lastName"
+        class="form-reg-user__input"
+        type="text"
+        required
+      />
+    </div>
+    <div class="form-reg-user__field">
+      <input
         placeholder="example@mail.com"
         v-model="form.email"
         class="form-reg-user__input"
@@ -41,23 +59,13 @@
       />
     </div>
 
-    <div class="form-reg-user__field">
-      <input
-        placeholder="name"
-        v-model="form.name"
-        class="form-reg-user__input"
-        type="text"
-        required
-      />
-    </div>
-
     <!-- Новый стиль: переключатели -->
     <div class="form-reg-user__toggles">
       <label class="form-reg-user__toggle-switch">
         <input
           class="form-reg-user__toggle-checkbox"
           type="checkbox"
-          v-model="agreeTerms"
+          v-model="form.termsAccepted"
         />
         <span class="form-reg-user__slider"></span>
         <span class="form-reg-user__label-text">Согласие с правилами</span>
@@ -77,13 +85,8 @@ import UiButton from "../ui/UiButton.vue";
 const props = defineProps({ form: Object });
 const emit = defineEmits(["submit"]);
 
-// Состояния переключателей
-const agreeTerms = ref(false);
-
 function onSubmit() {
-  emit("submit", {
-    agreeTerms: agreeTerms.value,
-  });
+  emit("submit");
 }
 </script>
 

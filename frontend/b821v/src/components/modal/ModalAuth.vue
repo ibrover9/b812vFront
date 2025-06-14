@@ -9,7 +9,6 @@
           aria-labelledby="modalTitle"
         >
           <header class="modal-auth__header">
-            <!-- Первая строка: переключатель Физическое / Юридическое -->
             <div class="modal-auth__tabs">
               <button
                 :class="[
@@ -32,7 +31,6 @@
               </button>
             </div>
 
-            <!-- Вторая строка: переключатель Авторизация / Регистрация -->
             <div class="modal-auth__modes">
               <button
                 :class="[
@@ -61,38 +59,37 @@
 
           <div class="modal-auth__body">
             <transition name="tab" mode="out-in">
-              <!-- 4 возможных варианта форм -->
-              <!-- Физическое лицо / Авторизация -->
               <FormAuthIndividual
                 v-if="activeTab === 'individual' && authMode === 'login'"
                 key="auth-individual"
                 :form="formIndividual"
+                id="formLogin"
                 @submit="submitForm"
               />
 
-              <!-- Физическое лицо / Регистрация -->
               <FormRegistrationIndividual
                 v-else-if="
                   activeTab === 'individual' && authMode === 'register'
                 "
                 key="reg-individual"
                 :form="formIndividual"
+                id="formRegister"
                 @submit="submitForm"
               />
 
-              <!-- Юридическое лицо / Авторизация -->
               <FormAuthLegal
                 v-else-if="activeTab === 'legal' && authMode === 'login'"
                 key="auth-legal"
                 :form="formLegal"
+                id="formLoginLegal"
                 @submit="submitForm"
               />
 
-              <!-- Юридическое лицо / Регистрация -->
               <FormRegistrationLegal
                 v-else
                 key="reg-legal"
                 :form="formLegal"
+                id="formRegisterLegal"
                 @submit="submitForm"
               />
             </transition>
@@ -111,8 +108,8 @@ import {
   defineEmits,
   onMounted,
   onBeforeUnmount,
+  nextTick,
 } from "vue";
-
 import FormAuthIndividual from "/src/components/form/FormAuthIndividual.vue";
 import FormRegistrationIndividual from "../form/FormRegistrationIndividual.vue";
 import FormAuthLegal from "../form/FormAuthLegal.vue";
@@ -120,31 +117,22 @@ import FormRegistrationLegal from "../form/FormRegistrationLegal.vue";
 import axios from "axios";
 import { useUserStore } from "@/stores/user.js";
 
-const props = defineProps({
-  modelValue: {
-    type: Boolean,
-    required: true,
-  },
-});
-
+const props = defineProps({ modelValue: { type: Boolean, required: true } });
 const emit = defineEmits(["update:modelValue", "submit"]);
 
 const isSubmitting = ref(false);
-
-// Состояние, отвечающее за вкладки «Физическое / Юридическое»
 const activeTab = ref("individual");
-
-// Состояние, отвечающее за режим «Авторизация / Регистрация»
 const authMode = ref("login");
-
 const userStore = useUserStore();
 
-// Разделяем данные форм для физического и юридического лиц
 const formIndividual = reactive({
   email: "",
+  firstName: "",
+  lastName: "",
   phone: "",
   password: "",
   confirmPassword: "",
+  termsAccepted: false,
 });
 
 const formLegal = reactive({
@@ -154,30 +142,27 @@ const formLegal = reactive({
   confirmPassword: "",
   companyName: "",
   taxId: "",
+  termsAccepted: false,
+  authorizedRepresentative: false,
 });
 
-// Переключение вкладок
 function switchTab(tab) {
   if (activeTab.value === tab) return;
   activeTab.value = tab;
-  // Сброс режима на «Регистрация» при смене вкладки (опционально)
   authMode.value = "login";
 }
 
-// Переключение между Авторизацией и Регистрацией
 function switchMode(mode) {
   if (authMode.value === mode) return;
   authMode.value = mode;
 }
 
-// Закрытие модалки
 function closeModal() {
   emit("update:modelValue", false);
 }
 
-// Обработчик сабмита — в зависимости от таба и режима берем нужные поля
 async function submitForm() {
-  if (isSubmitting.value) return; // блок повторного нажатия
+  if (isSubmitting.value) return;
   isSubmitting.value = true;
 
   const currentForm = activeTab.value === "legal" ? formLegal : formIndividual;
@@ -191,15 +176,32 @@ async function submitForm() {
     return;
   }
 
+  if (authMode.value === "register" && !currentForm.termsAccepted) {
+    alert("Нужно принять условия использования");
+    isSubmitting.value = false;
+    return;
+  }
+
   const payload = {
     role: activeTab.value === "legal" ? "company" : "user",
     email: currentForm.email,
     password: currentForm.password,
   };
 
+  if (activeTab.value === "individual" && authMode.value === "register") {
+    payload.firstName = currentForm.firstName;
+    payload.lastName = currentForm.lastName;
+    payload.phone = currentForm.phone;
+    payload.termsAccepted = currentForm.termsAccepted;
+    payload.confirmPassword = currentForm.confirmPassword;
+  }
+
   if (activeTab.value === "legal" && authMode.value === "register") {
     payload.companyName = formLegal.companyName;
     payload.taxId = formLegal.taxId;
+    payload.phone = formLegal.phone;
+    payload.termsAccepted = formLegal.termsAccepted;
+    payload.confirmPassword = currentForm.confirmPassword;
   }
 
   try {
@@ -209,6 +211,7 @@ async function submitForm() {
     } else {
       response = await loginUser(payload);
     }
+    console.log(response);
     userStore.login(response);
     resetForms();
     closeModal();
@@ -226,71 +229,61 @@ async function submitForm() {
 function resetForms() {
   Object.assign(formIndividual, {
     email: "",
+    firstName: "",
+    lastName: "",
+    phone: "",
     password: "",
     confirmPassword: "",
+    termsAccepted: false,
   });
   Object.assign(formLegal, {
     email: "",
+    phone: "",
     password: "",
     confirmPassword: "",
     companyName: "",
     taxId: "",
+    termsAccepted: false,
+    authorizedRepresentative: false,
   });
 }
 
-// Чтобы закрывать модалку по Escape
+async function registerUser(payload) {
+  const response = await axios.post(
+    `${import.meta.env.VITE_API_URL}api/auth/register`,
+    payload,
+    { headers: { "Content-Type": "application/json" } }
+  );
+  return response.data;
+}
+
+async function loginUser(payload) {
+  const response = await axios.post(
+    `${import.meta.env.VITE_API_URL}api/auth/login`,
+    payload,
+    { headers: { "Content-Type": "application/json" } }
+  );
+  return response.data;
+}
+
+onMounted(() => {
+  window.addEventListener("keydown", handleKeyDown);
+  nextTick(() => {
+    // Фокус на первый инпут
+    const firstInput = document.querySelector(".modal-auth__dialog input");
+    firstInput?.focus();
+  });
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener("keydown", handleKeyDown);
+});
+
 function handleKeyDown(event) {
   if (event.key === "Escape") {
     closeModal();
   }
 }
-
-const dataUser = ref([]);
-
-async function registerUser(payload) {
-  try {
-    const response = await axios.post(
-      `${import.meta.env.VITE_API_URL}api/auth/register`, // замените на реальный endpoint
-      payload,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    console.log("Регистрация успешна:", response.data);
-    return response.data;
-  } catch (error) {
-    console.error("Ошибка при регистрации:", error);
-    throw error;
-  }
-}
-
-async function loginUser(payload) {
-  try {
-    const response = await axios.post(
-      `${import.meta.env.VITE_API_URL}api/auth/login`, // замените на реальный endpoint
-      payload,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    console.log("Авторизация успешна:", response.data);
-    return response.data;
-  } catch (error) {
-    console.error("Ошибка при авторизации:", error);
-    throw error;
-  }
-}
-
-onMounted(() => {
-  window.addEventListener("keydown", handleKeyDown);
-});
-onBeforeUnmount(() => {
-  window.removeEventListener("keydown", handleKeyDown);
-});
 </script>
 
 <style lang="stylus" scoped>
