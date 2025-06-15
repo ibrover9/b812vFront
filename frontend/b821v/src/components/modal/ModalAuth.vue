@@ -149,8 +149,9 @@ const formLegal = reactive({
   phone: "",
   password: "",
   confirmPassword: "",
-  companyName: "",
-  taxId: "",
+  organizationName: "",
+  representativeFullName: "",
+  inn: "",
   termsAccepted: false,
   authorizedRepresentative: false,
 });
@@ -209,11 +210,13 @@ async function submitForm() {
 
   if (activeTab.value === "legal" && authMode.value === "register") {
     Object.assign(payload, {
-      companyName: formLegal.companyName,
-      taxId: formLegal.taxId,
+      organizationName: formLegal.organizationName,
+      representativeFullName: formLegal.representativeFullName,
+      inn: formLegal.inn,
       phone: formLegal.phone,
       termsAccepted: formLegal.termsAccepted,
       confirmPassword: currentForm.confirmPassword,
+      authorizedRepresentative: formLegal.authorizedRepresentative,
     });
   }
 
@@ -242,7 +245,8 @@ async function submitForm() {
 
 async function handleEmailCodeConfirm(code) {
   confirmationCode.value = code;
-  const email = formIndividual.email;
+  const email =
+    activeTab.value === "legal" ? formLegal.email : formIndividual.email;
   console.log(email, code);
 
   try {
@@ -293,6 +297,7 @@ function resetForms() {
 }
 
 async function registerUser(payload) {
+  console.log(payload);
   const response = await axios.post(
     `${import.meta.env.VITE_API_URL}api/auth/register`,
     payload,

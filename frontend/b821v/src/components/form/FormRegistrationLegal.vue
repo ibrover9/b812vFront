@@ -1,11 +1,21 @@
 <template>
-  <form class="form-reg-copany">
+  <form class="form-reg-copany" @submit.prevent="onSubmit">
     <div class="form-reg-copany__field">
       <input
         placeholder="example@mail.com"
         v-model="form.email"
         class="form-reg-copany__input"
         type="email"
+        required
+      />
+    </div>
+
+    <div class="form-reg-copany__field">
+      <input
+        placeholder="представитель ФИО"
+        v-model="form.representativeFullName"
+        class="form-reg-copany__input"
+        type="representativeFullName"
         required
       />
     </div>
@@ -24,7 +34,7 @@
     <div class="form-reg-copany__field">
       <input
         placeholder="сompany-name"
-        v-model="form.companyName"
+        v-model="form.organizationName"
         class="form-reg-copany__input"
         type="text"
         required
@@ -34,7 +44,7 @@
     <div class="form-reg-copany__field">
       <input
         placeholder="INN"
-        v-model="form.taxId"
+        v-model="form.inn"
         class="form-reg-copany__input"
         type="text"
         required
@@ -66,7 +76,7 @@
       <label class="form-reg-copany__toggle-switch">
         <input
           type="checkbox"
-          v-model="agreeTerms"
+          v-model="form.termsAccepted"
           class="form-reg-copany__toggle-checkbox"
         />
         <span class="form-reg-copany__slider"></span>
@@ -76,7 +86,7 @@
       <label class="form-reg-copany__toggle-switch">
         <input
           type="checkbox"
-          v-model="isAuthorizedPerson"
+          v-model="form.authorizedRepresentative"
           class="form-reg-copany__toggle-checkbox"
         />
         <span class="form-reg-copany__slider"></span>
@@ -90,7 +100,6 @@
   </form>
 </template>
 
-<
 <script setup>
 import { defineProps, defineEmits, ref } from "vue";
 import UiButton from "/src/components/ui/UiButton.vue";
@@ -101,20 +110,13 @@ const props = defineProps({
 
 const emit = defineEmits(["submit"]);
 
-const agreeTerms = ref(false);
-const isAuthorizedPerson = ref(false);
-
 function onSubmit() {
   if (props.form.password !== props.form.confirmPassword) {
     alert("Пароли не совпадают");
     return;
   }
 
-  emit("submit", {
-    ...props.form,
-    agreeTerms: agreeTerms.value,
-    isAuthorizedPerson: isAuthorizedPerson.value,
-  });
+  emit("submit");
 }
 </script>
 
