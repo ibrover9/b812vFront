@@ -1,31 +1,32 @@
 <template>
-  <form class="form-reg-user" @submit.prevent="onSubmit">
+  <form class="form-reg-user" @submit.prevent="handleSubmit">
     <div class="form-reg-user__field">
       <input
-        placeholder="first name"
+        placeholder="First Name"
         v-model="form.firstName"
         class="form-reg-user__input"
         type="text"
-        required
       />
+      <p v-if="errors.firstName" class="form-error">{{ errors.firstName }}</p>
     </div>
+
     <div class="form-reg-user__field">
       <input
-        placeholder="last name"
+        placeholder="Last Name"
         v-model="form.lastName"
         class="form-reg-user__input"
         type="text"
-        required
       />
+      <p v-if="errors.lastName" class="form-error">{{ errors.lastName }}</p>
     </div>
+
     <div class="form-reg-user__field">
       <input
         placeholder="example@mail.com"
         v-model="form.email"
         class="form-reg-user__input"
-        type="email"
-        required
       />
+      <p v-if="errors.email" class="form-error">{{ errors.email }}</p>
     </div>
 
     <div class="form-reg-user__field">
@@ -35,31 +36,32 @@
         v-model="form.phone"
         v-mask="'+7 (###) ###-##-##'"
         type="tel"
-        required
       />
+      <p v-if="errors.phone" class="form-error">{{ errors.phone }}</p>
     </div>
 
     <div class="form-reg-user__field">
       <input
-        placeholder="password"
+        placeholder="Password"
         v-model="form.password"
         class="form-reg-user__input"
         type="password"
-        required
       />
+      <p v-if="errors.password" class="form-error">{{ errors.password }}</p>
     </div>
 
     <div class="form-reg-user__field">
       <input
-        placeholder="confirm-password"
+        placeholder="Confirm Password"
         v-model="form.confirmPassword"
         class="form-reg-user__input"
         type="password"
-        required
       />
+      <p v-if="errors.confirmPassword" class="form-error">
+        {{ errors.confirmPassword }}
+      </p>
     </div>
 
-    <!-- Новый стиль: переключатели -->
     <div class="form-reg-user__toggles">
       <label class="form-reg-user__toggle-switch">
         <input
@@ -70,6 +72,9 @@
         <span class="form-reg-user__slider"></span>
         <span class="form-reg-user__label-text">Согласие с правилами</span>
       </label>
+      <p v-if="errors.termsAccepted" class="form-error">
+        {{ errors.termsAccepted }}
+      </p>
     </div>
 
     <UiButton class="form-reg-user__button" size="lg" type="submit">
@@ -79,14 +84,78 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits, ref } from "vue";
+import { ref } from "vue";
 import UiButton from "../ui/UiButton.vue";
 
-const props = defineProps({ form: Object });
+const props = defineProps({ form: { type: Object, required: true } });
 const emit = defineEmits(["submit"]);
 
-function onSubmit() {
-  emit("submit");
+const errors = ref({
+  firstName: "",
+  lastName: "",
+  email: "",
+  phone: "",
+  password: "",
+  confirmPassword: "",
+  termsAccepted: "",
+});
+
+function validateForm() {
+  // email regex
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  let hasErrors = false;
+
+  // reset errors
+  Object.keys(errors.value).forEach((key) => (errors.value[key] = ""));
+
+  if (!props.form.firstName) {
+    errors.value.firstName = "Имя обязательно";
+    hasErrors = true;
+  }
+  if (!props.form.lastName) {
+    errors.value.lastName = "Фамилия обязательна";
+    hasErrors = true;
+  }
+  if (!props.form.email) {
+    errors.value.email = "Email обязателен";
+    hasErrors = true;
+  } else if (!emailPattern.test(props.form.email)) {
+    errors.value.email = "Введите корректный email";
+    hasErrors = true;
+  }
+  if (!props.form.phone) {
+    errors.value.phone = "Телефон обязателен";
+    hasErrors = true;
+  } else if (props.form.phone.replace(/[^\d]/g, "").length !== 11) {
+    errors.value.phone = "Введите полный номер телефона";
+    hasErrors = true;
+  }
+  if (!props.form.password) {
+    errors.value.password = "Пароль обязателен";
+    hasErrors = true;
+  } else if (props.form.password.length < 6) {
+    errors.value.password = "Пароль должен содержать не менее 6 символов";
+    hasErrors = true;
+  }
+  if (!props.form.confirmPassword) {
+    errors.value.confirmPassword = "Нужно подтвердить пароль";
+    hasErrors = true;
+  } else if (props.form.confirmPassword !== props.form.password) {
+    errors.value.confirmPassword = "Пароли не совпадают";
+    hasErrors = true;
+  }
+  if (!props.form.termsAccepted) {
+    errors.value.termsAccepted = "Необходимо согласие с правилами";
+    hasErrors = true;
+  }
+
+  return !hasErrors;
+}
+
+function handleSubmit() {
+  if (validateForm()) {
+    emit("submit");
+  }
 }
 </script>
 
@@ -115,7 +184,7 @@ function onSubmit() {
     display flex
     flex-direction column
     gap 16px
-    margin-bottom: 20px
+    margin-bottom 20px
 
   &__toggle-switch
     position relative
@@ -164,4 +233,9 @@ function onSubmit() {
   margin-top 20px
   display flex
   justify-content center
+
+.form-error
+  color red
+  font-size 13px
+  margin-top 4px
 </style>

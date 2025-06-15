@@ -4,10 +4,10 @@
       <input
         class="form-auth-user__input"
         v-model="form.email"
-        type="email"
         id="email"
-        required
+        placeholder="Email"
       />
+      <p v-if="errors.email" class="form-error">{{ errors.email }}</p>
     </div>
 
     <div class="form-auth-user__group">
@@ -16,8 +16,9 @@
         v-model="form.password"
         type="password"
         id="password"
-        required
+        placeholder="Пароль"
       />
+      <p v-if="errors.password" class="form-error">{{ errors.password }}</p>
     </div>
 
     <UiButton class="form-auth-user__button" size="lg"> Войти </UiButton>
@@ -25,8 +26,10 @@
 </template>
 
 <script setup>
+import { ref, watch } from "vue";
 import UiButton from "../ui/UiButton.vue";
-defineProps({
+
+const props = defineProps({
   form: {
     type: Object,
     required: true,
@@ -35,8 +38,44 @@ defineProps({
 
 const emit = defineEmits(["submit"]);
 
+const errors = ref({
+  email: "",
+  password: "",
+});
+
+function validateForm() {
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  let hasErrors = false;
+
+  // сбрасываем ошибки
+  errors.value.email = "";
+  errors.value.password = "";
+
+  // валидация email
+  if (!props.form.email) {
+    errors.value.email = "Email обязателен";
+    hasErrors = true;
+  } else if (!emailPattern.test(props.form.email)) {
+    errors.value.email = "Введите корректный email";
+    hasErrors = true;
+  }
+
+  // валидация пароля
+  if (!props.form.password) {
+    errors.value.password = "Пароль обязателен";
+    hasErrors = true;
+  } else if (props.form.password.length < 6) {
+    errors.value.password = "Пароль должен быть не менее 6 символов";
+    hasErrors = true;
+  }
+
+  return !hasErrors;
+}
+
 function handleSubmit() {
-  emit("submit");
+  if (validateForm()) {
+    emit("submit");
+  }
 }
 </script>
 
@@ -64,4 +103,8 @@ function handleSubmit() {
         margin-top 40px
         display flex
         justify-content center
+.form-error
+  color red
+  font-size 13px
+  margin-top 4px
 </style>
