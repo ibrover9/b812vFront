@@ -59,8 +59,14 @@
 
           <div class="modal-auth__body">
             <transition name="tab" mode="out-in">
+              <FormEmailConfirmation
+                v-if="showEmailConfirmation"
+                key="email-confirm"
+                @confirm="handleEmailCodeConfirm"
+              />
+
               <FormAuthIndividual
-                v-if="activeTab === 'individual' && authMode === 'login'"
+                v-else-if="activeTab === 'individual' && authMode === 'login'"
                 key="auth-individual"
                 :form="formIndividual"
                 id="formLogin"
@@ -114,6 +120,7 @@ import FormAuthIndividual from "/src/components/form/FormAuthIndividual.vue";
 import FormRegistrationIndividual from "../form/FormRegistrationIndividual.vue";
 import FormAuthLegal from "../form/FormAuthLegal.vue";
 import FormRegistrationLegal from "../form/FormRegistrationLegal.vue";
+import FormEmailConfirmation from "../form/FormEmailConfirmation.vue";
 import axios from "axios";
 import { useUserStore } from "@/stores/user.js";
 
@@ -124,6 +131,8 @@ const isSubmitting = ref(false);
 const activeTab = ref("individual");
 const authMode = ref("login");
 const userStore = useUserStore();
+const showEmailConfirmation = ref(false);
+const confirmationCode = ref("");
 
 const formIndividual = reactive({
   email: "",
@@ -189,32 +198,37 @@ async function submitForm() {
   };
 
   if (activeTab.value === "individual" && authMode.value === "register") {
-    payload.firstName = currentForm.firstName;
-    payload.lastName = currentForm.lastName;
-    payload.phone = currentForm.phone;
-    payload.termsAccepted = currentForm.termsAccepted;
-    payload.confirmPassword = currentForm.confirmPassword;
+    Object.assign(payload, {
+      firstName: currentForm.firstName,
+      lastName: currentForm.lastName,
+      phone: currentForm.phone,
+      termsAccepted: currentForm.termsAccepted,
+      confirmPassword: currentForm.confirmPassword,
+    });
   }
 
   if (activeTab.value === "legal" && authMode.value === "register") {
-    payload.companyName = formLegal.companyName;
-    payload.taxId = formLegal.taxId;
-    payload.phone = formLegal.phone;
-    payload.termsAccepted = formLegal.termsAccepted;
-    payload.confirmPassword = currentForm.confirmPassword;
+    Object.assign(payload, {
+      companyName: formLegal.companyName,
+      taxId: formLegal.taxId,
+      phone: formLegal.phone,
+      termsAccepted: formLegal.termsAccepted,
+      confirmPassword: currentForm.confirmPassword,
+    });
   }
 
   try {
-    let response;
     if (authMode.value === "register") {
-      response = await registerUser(payload);
+      await registerUser(payload);
+      showEmailConfirmation.value = true;
+      isSubmitting.value = false;
+      return;
     } else {
-      response = await loginUser(payload);
+      const response = await loginUser(payload);
+      userStore.login(response);
+      resetForms();
+      closeModal();
     }
-    console.log(response);
-    userStore.login(response);
-    resetForms();
-    closeModal();
   } catch (error) {
     if (error.response?.status === 429) {
       alert("Слишком много попыток. Подождите немного и попробуйте снова.");
@@ -223,6 +237,36 @@ async function submitForm() {
     }
   } finally {
     isSubmitting.value = false;
+  }
+}
+
+async function handleEmailCodeConfirm(code) {
+  confirmationCode.value = code;
+  const email = formIndividual.email;
+  console.log(email, code);
+
+  try {
+    const response = await axios.post(
+      `${import.meta.env.VITE_API_URL}api/auth/verify-email/`,
+      {
+        email,
+        code,
+      },
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+
+    // Предположим, что ответ содержит токен/пользователя
+    userStore.login(response.data);
+
+    // Очистка и закрытие
+    showEmailConfirmation.value = false;
+    resetForms();
+    closeModal();
+  } catch (error) {
+    console.error("Ошибка подтверждения кода:", error);
+    alert("Неверный код подтверждения или ошибка сервера.");
   }
 }
 
@@ -269,7 +313,6 @@ async function loginUser(payload) {
 onMounted(() => {
   window.addEventListener("keydown", handleKeyDown);
   nextTick(() => {
-    // Фокус на первый инпут
     const firstInput = document.querySelector(".modal-auth__dialog input");
     firstInput?.focus();
   });
