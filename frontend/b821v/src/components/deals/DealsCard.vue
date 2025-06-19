@@ -63,15 +63,22 @@
         </div>
         <div v-if="status !== 'ended'" class="deals-card__payment">
           <span>Стоимость: 1000₽</span>
-          <UiButton>
-            {{
-              status === "processing"
-                ? "Оформить договор"
-                : status === "noEnded"
-                ? "Оплатить"
-                : "Действие"
-            }}
-          </UiButton>
+          <RouterLink
+            :to="`/orders/${
+              status === 'processing' ? 'documents' : 'payments'
+            }/${auction.id}`"
+            v-if="status === 'processing' || status === 'noEnded'"
+          >
+            <UiButton>
+              {{
+                status === "processing"
+                  ? "Оформить договор"
+                  : status === "noEnded"
+                  ? "Оплатить"
+                  : "Действие"
+              }}
+            </UiButton>
+          </RouterLink>
         </div>
       </div>
     </div>
@@ -82,9 +89,9 @@
 import AuctionSlider from "../sliders/AuctionSlider.vue";
 import UiButton from "../ui/UiButton.vue";
 import UiIcon from "../ui/UiIcon.vue";
-
+import { RouterLink } from "vue-router";
 import { ref } from "vue";
-const status = ref("processing");
+const status = ref("noEnded");
 
 defineProps({
   auction: Object,

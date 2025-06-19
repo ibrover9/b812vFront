@@ -5,6 +5,8 @@ import AuctionsCategory from "@/views/AuctionsCategory.vue";
 import Auctions from "@/views/Auctions.vue";
 import Profile from "@/views/Profile.vue";
 import Deals from "@/views/Deals.vue";
+import Payments from "@/views/Payment.vue";
+import Documents from "@/views/Documents.vue";
 
 const routes = [
   {
@@ -41,6 +43,20 @@ const routes = [
     path: "/orders",
     name: "Orders",
     component: Deals,
+    props: true,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/orders/payments/:id",
+    name: "Payments",
+    component: Payments,
+    props: true,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/orders/documents/:id",
+    name: "Documents",
+    component: Documents,
     props: true,
     meta: { requiresAuth: true },
   },

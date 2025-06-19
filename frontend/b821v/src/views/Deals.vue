@@ -89,6 +89,10 @@ watch(
 
 <style lang="stylus">
 .deals
+    display flex
+    flex-direction column
+    gap 20px
+    margin-bottom 40px
     &__title
         margin-top 40px
         margin-bottom 20px
