@@ -2,16 +2,24 @@
   <div class="main-wrapper auctions">
     <h1 class="auctions__title">{{ categoryText }}</h1>
     <div class="auctions__main">
-      <AuctionCard />
-      <AuctionCard />
-      <AuctionCard />
+      <AuctionCard
+        v-for="auction in auctions"
+        :key="auction.id"
+        :auction="auction"
+      />
     </div>
   </div>
 </template>
 
 <script setup>
+import { onMounted, ref, watch } from "vue";
+import axios from "axios";
 import AuctionCard from "../components/auctions/AuctionCard.vue";
+import { useUserStore } from "../stores/user";
+
 const props = defineProps(["id"]);
+const auctions = ref([]);
+const userStore = useUserStore();
 
 const categoryMap = {
   sport: "спорт",
@@ -26,6 +34,31 @@ const categoryMap = {
 };
 
 const categoryText = categoryMap[props.id] || "Категория не найдена";
+
+const fetchAuctions = async () => {
+  console.log(userStore.token);
+  try {
+    const response = await axios.get("http://localhost:8080/api/auction/", {
+      headers: {
+        Authorization: `Bearer ${userStore.token}`,
+      },
+    });
+    auctions.value = response.data;
+    console.log(auctions.value);
+  } catch (error) {
+    console.error("Ошибка при загрузке аукционов:", error);
+  }
+};
+
+watch(
+  () => userStore.token,
+  (newToken) => {
+    if (newToken) {
+      fetchAuctions();
+    }
+  },
+  { immediate: true } // ← сработает сразу, если токен уже есть
+);
 </script>
 
 <style lang="stylus">

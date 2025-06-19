@@ -1,43 +1,37 @@
 <template>
   <div class="slider-wrapper">
-    <swiper
+    <Swiper
       :modules="[Pagination]"
-      :pagination="{
-        clickable: true,
-        el: paginationRef,
-      }"
-      @swiper="onSwiper"
+      :pagination="{ clickable: true }"
       class="custom-swiper"
     >
-      <swiper-slide v-for="(image, index) in images" :key="index" class="slide">
+      <SwiperSlide v-for="(img, idx) in images" :key="img" class="slide">
         <div class="slide-wrapper">
-          <img :src="image" alt="Slide" class="slide-image" />
+          <img :src="img" alt="Slide" class="slide-image" />
         </div>
-      </swiper-slide>
-    </swiper>
-    <div ref="paginationRef" class="custom-pagination"></div>
+      </SwiperSlide>
+    </Swiper>
   </div>
 </template>
 
 <script setup>
 import { Swiper, SwiperSlide } from "swiper/vue";
 import { Pagination } from "swiper/modules";
+import { onMounted } from "vue";
+
 import "swiper/css";
 import "swiper/css/pagination";
-import { ref } from "vue";
 
-const images = [
-  "/auction-slide-1.png",
-  "/auction-slide-2.png",
-  "/auction-slide-3.png",
-];
+const { images } = defineProps({
+  images: {
+    type: Array,
+    required: true,
+  },
+});
 
-const paginationRef = ref(null);
-
-const onSwiper = (swiper) => {
-  swiper.pagination.render();
-  swiper.pagination.update();
-};
+onMounted(() => {
+  console.log("images (spread):", [...images]);
+});
 </script>
 
 <style scoped>
