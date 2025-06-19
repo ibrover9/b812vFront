@@ -59,6 +59,7 @@ const fetchAuctions = async () => {
     auctions.value = response.data.filter((auction) =>
       auction.category.includes(props.id)
     );
+    console.log(auctions.value);
 
     console.log("📦 Загружены аукционы:", auctions.value);
 
@@ -79,7 +80,8 @@ onMounted(() => {
 
     const index = auctions.value.findIndex((a) => a._id === data.auctionId);
     if (index !== -1) {
-      auctions.value[index].currentPrice = data.amount;
+      console.log("1");
+      auctions.value[index].currentPrice = data.currentPrice;
       auctions.value[index].winner = data.userId;
     } else {
       console.warn("⚠️ Аукцион не найден в списке:", data.auctionId);
