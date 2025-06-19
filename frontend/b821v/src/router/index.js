@@ -4,6 +4,7 @@ import News from "@/views/News.vue";
 import AuctionsCategory from "@/views/AuctionsCategory.vue";
 import Auctions from "@/views/Auctions.vue";
 import Profile from "@/views/Profile.vue";
+import Deals from "@/views/Deals.vue";
 
 const routes = [
   {
@@ -33,6 +34,13 @@ const routes = [
     path: "/profile",
     name: "Profile",
     component: Profile,
+    props: true,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/orders",
+    name: "Orders",
+    component: Deals,
     props: true,
     meta: { requiresAuth: true },
   },
