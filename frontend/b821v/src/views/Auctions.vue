@@ -36,15 +36,16 @@ const categoryMap = {
 const categoryText = categoryMap[props.id] || "Категория не найдена";
 
 const fetchAuctions = async () => {
-  console.log(userStore.token);
   try {
     const response = await axios.get("http://localhost:8080/api/auction/", {
       headers: {
         Authorization: `Bearer ${userStore.token}`,
       },
     });
-    auctions.value = response.data;
-    console.log(auctions.value);
+    // Фильтруем аукционы по категории:
+    auctions.value = response.data.filter((auction) =>
+      auction.category.includes(props.id)
+    );
   } catch (error) {
     console.error("Ошибка при загрузке аукционов:", error);
   }
@@ -63,6 +64,7 @@ watch(
 
 <style lang="stylus">
 .auctions
+    margin-bottom 40px
     &__title
         margin-top 40px
         margin-bottom 20px
