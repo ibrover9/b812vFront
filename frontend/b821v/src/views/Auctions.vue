@@ -3,7 +3,7 @@
     <h1 class="auctions__title">{{ categoryText }}</h1>
     <div class="auctions__main">
       <AuctionCard
-        v-for="auction in auctions"
+        v-for="auction in activeAuctions"
         :key="auction.id"
         :auction="auction"
       />
@@ -12,7 +12,7 @@
 </template>
 
 <script setup>
-import { onMounted, onUnmounted, ref, watch } from "vue";
+import { onMounted, onUnmounted, ref, watch, computed } from "vue";
 import axios from "axios";
 import AuctionCard from "../components/auctions/AuctionCard.vue";
 import { useUserStore } from "../stores/user";
@@ -21,6 +21,10 @@ import { io } from "socket.io-client";
 const props = defineProps(["id"]);
 const auctions = ref([]);
 const userStore = useUserStore();
+
+const activeAuctions = computed(() =>
+  auctions.value.filter((a) => a.status !== "ended")
+);
 
 const socket = io("http://localhost:8080", {
   transports: ["websocket"],

@@ -11,6 +11,7 @@ export const useUserStore = defineStore("user", () => {
   const phone = ref("");
   const emailVerified = ref(false);
   const updatedAt = ref("");
+  const id = ref("");
 
   const token = ref("");
   const isLoggedIn = computed(() => !!token.value);
@@ -26,6 +27,8 @@ export const useUserStore = defineStore("user", () => {
     email.value = user.email || "";
     token.value = data.token || "";
     phone.value = user.phone || "";
+    id.value = user._id || "";
+    console.log(id.value);
     emailVerified.value = user.emailVerified || false;
     updatedAt.value = user.updatedAt || "";
 
@@ -39,6 +42,7 @@ export const useUserStore = defineStore("user", () => {
   }
 
   function logout() {
+    id.value = "";
     email.value = "";
     role.value = "";
     firstName.value = "";
@@ -52,6 +56,7 @@ export const useUserStore = defineStore("user", () => {
   }
 
   return {
+    id,
     email,
     role,
     firstName,
