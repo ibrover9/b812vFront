@@ -2,8 +2,6 @@
   <div class="profile-page">
     <UiHeaderPage :items="headerItems" />
     <ProfileData />
-    <ProfileHistoryAuction />
-    <ProfilwContract />
   </div>
 </template>
 
