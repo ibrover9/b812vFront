@@ -1,5 +1,5 @@
 <template>
-  <div class="profile">
+  <div class="profile-page">
     <UiHeaderPage :items="headerItems" />
     <ProfileData />
     <ProfileHistoryAuction />

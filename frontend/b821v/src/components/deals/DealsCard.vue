@@ -91,7 +91,7 @@ import UiButton from "../ui/UiButton.vue";
 import UiIcon from "../ui/UiIcon.vue";
 import { RouterLink } from "vue-router";
 import { ref } from "vue";
-const status = ref("noEnded");
+const status = ref("processing");
 
 defineProps({
   auction: Object,

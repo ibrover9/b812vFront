@@ -33,8 +33,8 @@ function handleLogout() {
 
 <style lang="stylus">
 .profile-data
-    padding-top 40px
-    padding-bottom 40px
+    padding-top 40px !important
+    padding-bottom 40px !important
     display grid
     align-items: center;
     grid-template-columns 1fr 1fr
