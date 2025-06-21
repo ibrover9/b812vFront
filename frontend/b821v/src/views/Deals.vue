@@ -11,7 +11,6 @@ import axios from "axios";
 import DealsCard from "../components/deals/DealsCard.vue";
 import { useUserStore } from "../stores/user";
 import { io } from "socket.io-client";
-import { useRoute } from "vue-router";
 
 const props = defineProps(["id"]);
 const auctions = ref([]);

@@ -2,7 +2,9 @@
   <div class="deals-price">
     <div class="deals-price__price">
       <div class="deals-price__price-item">без учёта комиссии:</div>
-      <div class="deals-price__price-item">1.200.000$</div>
+      <div class="deals-price__price-item">
+        {{ userDeal.auctionId.currentPrice }}$
+      </div>
     </div>
     <div class="deals-price__commission">
       <div class="deals-price__price-item">комиссия:</div>
@@ -11,11 +13,15 @@
     <hr class="main-hr deals-hr" />
     <div class="deals-price__full-price">
       <div class="deals-price__price-item">Итоговая сумма:</div>
-      <div class="deals-price__price-item">1.201.000$</div>
+      <div class="deals-price__price-item">
+        {{ userDeal.auctionId.currentPrice + 1000 }}$
+      </div>
     </div>
   </div>
 </template>
-
+<script setup>
+defineProps(["userDeal"]);
+</script>
 <style lang="stylus" scoped>
 .deals-price
     &__price

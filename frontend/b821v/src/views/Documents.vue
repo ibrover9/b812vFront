@@ -1,15 +1,21 @@
 <template>
   <div class="documents main-wrapper">
-    <h1 class="documents__title">Имя модели</h1>
+    <h1 class="documents__title">{{ userDeal.auctionId.carName }}</h1>
     <DealsSlider />
     <DealsInfomationCar :userDeal="userDeal" />
     <DealsInformationSalesman :userDeal="userDeal" />
     <div class="documents__price">
-      <DealsPrice />
+      <DealsPrice :userDeal="userDeal" />
       <div class="documents__price-button">
-        <UiButton class="documents__price-uibutton" size="lg">
-          ОФОРМИТЬ ДОКУМЕНТ
-        </UiButton>
+        <RouterLink :to="`/orders/payments/${dealerId}`">
+          <UiButton
+            class="documents__price-uibutton"
+            size="lg"
+            @click="handlePayment"
+          >
+            ОПЛАТИТЬ АВТО
+          </UiButton>
+        </RouterLink>
       </div>
     </div>
   </div>
@@ -22,11 +28,12 @@ import DealsInformationSalesman from "@/components/deals/DealsInformationSalesma
 import DealsPrice from "@/components/deals/DealsPrice.vue";
 import UiButton from "@/components/ui/UiButton.vue";
 import { onMounted, onUnmounted, ref, watch } from "vue";
+import { RouterLink, useRoute } from "vue-router";
+
 import axios from "axios";
 import DealsCard from "../components/deals/DealsCard.vue";
 import { useUserStore } from "../stores/user";
 import { io } from "socket.io-client";
-import { useRoute } from "vue-router";
 
 const route = useRoute();
 const dealerId = route.params.id;
@@ -36,6 +43,24 @@ const dealAll = ref(null);
 const fetchedUser = ref(null);
 const userDeals = ref([]);
 const userDeal = ref(null);
+
+const handlePayment = async () => {
+  try {
+    const response = await axios.patch(
+      `http://localhost:8080/api/deal/${dealerId}`,
+      { status: "paid" }, // или любые нужные данные для обновления
+      {
+        headers: {
+          Authorization: `Bearer ${userStore.token}`,
+        },
+      }
+    );
+
+    console.log("✅ Успешная оплата:", response.data);
+  } catch (error) {
+    console.error("❌ Ошибка при оплате:", error);
+  }
+};
 
 const filterUserDeals = () => {
   if (!dealAll.value || !fetchedUser.value || !fetchedUser.value.deals) return;

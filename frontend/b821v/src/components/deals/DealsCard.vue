@@ -7,7 +7,7 @@
           class="status-indicator"
           :class="{
             'status-processing': auction.status === 'processing',
-            'status-ended': auction.status === 'ended',
+            'status-ended': auction.status === 'paid',
             'status-no-ended': auction.status === 'noEnded',
           }"
         ></span>
@@ -15,7 +15,7 @@
           {{
             auction.status === "processing"
               ? "В процессе"
-              : auction.status === "ended"
+              : auction.status === "paid"
               ? "Оплачен"
               : auction.status === "noEnded"
               ? "Неоплачен"
@@ -70,16 +70,14 @@
             :to="`/orders/${
               auction.status === 'processing' ? 'documents' : 'payments'
             }/${props.auction._id}`"
-            v-if="
-              auction.status === 'processing' || auction.status === 'noEnded'
-            "
+            v-if="auction.status === 'processing' || auction.status === 'paid'"
           >
             <UiButton>
               {{
                 auction.status === "processing"
                   ? "Оформить договор"
-                  : auction.status === "noEnded"
-                  ? "Оплатить"
+                  : auction.status === "paid"
+                  ? "Просмотр сделки"
                   : "Действие"
               }}
             </UiButton>

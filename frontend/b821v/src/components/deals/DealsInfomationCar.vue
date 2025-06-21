@@ -71,7 +71,9 @@
           <div class="deals-infomation-car__main-block-lable">
             Количество цилиндров
           </div>
-          <div class="deals-infomation-car__main-block-item">16</div>
+          <div class="deals-infomation-car__main-block-item">
+            {{ userDeal.auctionId.cylinders }}
+          </div>
         </div>
         <div class="deals-infomation-car__main-block-item-list">
           <div class="deals-infomation-car__main-block-lable">
@@ -137,7 +139,9 @@
     </div>
   </div>
 </template>
-
+<script setup>
+defineProps(["userDeal"]);
+</script>
 <style lang="stylus">
 .deals-hr
     height 3px

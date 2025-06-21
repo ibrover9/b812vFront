@@ -1,13 +1,30 @@
+<script setup>
+import UiButtonDock from "../ui/UiButtonDock.vue";
+import { jsPDF } from "jspdf";
+import UiButtonPrice from "../ui/UiButtonPrice.vue";
+defineProps(["userDeal"]);
+</script>
+
 <template>
   <div class="deals-documents">
     <div class="deals-documents__agreement">
       <div class="deals-documents__agreement-lable">Договор</div>
-      <div class="deals-documents__agreement-link"><a href="">Скачать</a></div>
+      <UiButtonDock
+        :priceCar="userDeal.auctionId.currentPrice + 1000"
+        :year="userDeal.auctionId.year"
+        :carName="userDeal.auctionId.carName"
+        :representativeFullName="userDeal.buyerId.representativeFullName"
+      />
     </div>
     <hr class="main-hr deals-hr" />
     <div class="deals-documents__agreement">
       <div class="deals-documents__agreement-lable">Счет</div>
-      <div class="deals-documents__agreement-link"><a href="">Скачать</a></div>
+      <UiButtonPrice
+        :priceCar="userDeal.auctionId.currentPrice + 1000"
+        :year="userDeal.auctionId.year"
+        :carName="userDeal.auctionId.carName"
+        :representativeFullName="userDeal.buyerId.representativeFullName"
+      />
     </div>
   </div>
 </template>

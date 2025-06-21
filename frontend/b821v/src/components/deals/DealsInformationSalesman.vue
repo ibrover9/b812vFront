@@ -6,28 +6,38 @@
     <div class="deals-infomation-salesman__main">
       <div class="deals-infomation-salesman__main-block">
         <h2 class="deals-infomation-salesman__main-block-title">
-          Название компании:
-        </h2>
-      </div>
-      <div class="deals-infomation-salesman__main-block">
-        <h2 class="deals-infomation-salesman__main-block-title">Город:</h2>
-      </div>
-      <div class="deals-infomation-salesman__main-block">
-        <h2 class="deals-infomation-salesman__main-block-title">
-          Контактное лицо:
-        </h2>
-      </div>
-      <div class="deals-infomation-salesman__main-block">
-        <h2 class="deals-infomation-salesman__main-block-title">ИНН:</h2>
-      </div>
-      <div class="deals-infomation-salesman__main-block">
-        <h2 class="deals-infomation-salesman__main-block-title">
-          Сайт или профиль компании:
+          Название компании: 7709991876
         </h2>
       </div>
       <div class="deals-infomation-salesman__main-block">
         <h2 class="deals-infomation-salesman__main-block-title">
-          Описание компании:
+          Город: Москва
+        </h2>
+      </div>
+      <div class="deals-infomation-salesman__main-block">
+        <h2 class="deals-infomation-salesman__main-block-title">
+          Контактное лицо: Мелехин Артем Андреевич
+        </h2>
+      </div>
+      <div class="deals-infomation-salesman__main-block">
+        <h2 class="deals-infomation-salesman__main-block-title">
+          ИНН: {{ userDeal.buyerId.inn }}
+        </h2>
+      </div>
+      <div class="deals-infomation-salesman__main-block">
+        <h2 class="deals-infomation-salesman__main-block-title">
+          Телефон: {{ userDeal.buyerId.phone }}
+        </h2>
+      </div>
+      <div class="deals-infomation-salesman__main-block">
+        <h2 class="deals-infomation-salesman__main-block-title">
+          Описание компании: Компания, занимающаяся разработкой программного
+          обеспечения и цифровых решений для автоматизации бизнес-процессов.
+          Специализируется на создании корпоративных информационных систем,
+          веб-платформ и мобильных приложений. Обладает опытом внедрения
+          цифровых инструментов в сфере торговли, логистики и финансов, а также
+          предоставляет консалтинговые услуги по цифровой трансформации
+          предприятий.
         </h2>
       </div>
       <div class="deals-infomation-salesman__main-block-documents">
@@ -39,7 +49,9 @@
     <hr class="main-hr deals-hr" />
   </div>
 </template>
-
+<script setup>
+defineProps(["userDeal"]);
+</script>
 <style lang="stylus">
 .deals-hr
     height 3px !important
@@ -55,7 +67,7 @@
         margin-top 20px
         margin-bottom 20px
         display grid
-        grid-template-columns: repeat(2, 1fr)
+
         gap: 16px
         font-family "PlayfairDisplaySC"
     &__main-block-documents
