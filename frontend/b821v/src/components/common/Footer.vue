@@ -39,7 +39,7 @@ export default {
 .footer
     background-color:$secondMainColor
     &__container
-        height: 160px
+        height 20vh
         background-color:$secondMainColor
         color:$thirdMainColor
         display flex

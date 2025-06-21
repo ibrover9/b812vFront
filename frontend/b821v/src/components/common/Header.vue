@@ -75,7 +75,7 @@ const headerItems = ref([
 <style lang="stylus">
 .header
   &__container
-    height: 70px
+    height: 10vh
     background-color: $secondMainColor
     color: $thirdMainColor
     display: flex

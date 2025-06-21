@@ -114,6 +114,7 @@ watch(
 <style lang="stylus">
 .auctions
     margin-bottom 40px
+    min-height 65vh
     &__title
         margin-top 40px
         margin-bottom 20px

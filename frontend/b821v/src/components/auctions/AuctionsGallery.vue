@@ -122,6 +122,10 @@ function navigateToCategory(category) {
 
 <style lang="stylus" scoped>
 .auctions-category
+  display flex
+  flex-direction column
+  justify-content center
+  min-height 65vh
   padding 40px 0
   background-color $secondMainColor
 
