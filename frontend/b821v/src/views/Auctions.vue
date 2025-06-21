@@ -99,6 +99,19 @@ onUnmounted(() => {
   socket.off("new_bid");
 });
 
+let fetchInterval = null;
+
+onMounted(() => {
+  // Подписка на ставки уже есть, теперь интервал:
+  fetchInterval = setInterval(() => {
+    fetchAuctions();
+  }, 5000);
+});
+
+onUnmounted(() => {
+  if (fetchInterval) clearInterval(fetchInterval);
+});
+
 // Запуск загрузки после получения токена
 watch(
   () => userStore.token,

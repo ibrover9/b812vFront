@@ -22,6 +22,7 @@ export const useUserStore = defineStore("user", () => {
   }));
 
   function login(data) {
+    console.log(data);
     const user = data.user || {};
     role.value = user.role || "";
     email.value = user.email || "";

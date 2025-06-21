@@ -53,7 +53,10 @@
             </div>
           </div>
         </div>
-        <AuctionAddBid :auction="auction" />
+        <AuctionAddBid
+          v-if="userStore.role === 'company' || userStore.role === 'admin'"
+          :auction="auction"
+        />
       </div>
     </div>
   </div>
@@ -64,6 +67,9 @@ import { ref, computed, onMounted, onUnmounted } from "vue";
 import AuctionSlider from "../sliders/AuctionSlider.vue";
 import UiIcon from "../ui/UiIcon.vue";
 import AuctionAddBid from "./AuctionAddBid.vue";
+import { useUserStore } from "@/stores/user";
+
+const userStore = useUserStore();
 
 const props = defineProps({
   auction: {
