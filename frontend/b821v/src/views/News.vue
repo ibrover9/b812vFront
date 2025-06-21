@@ -16,10 +16,13 @@ import Advices from "@/components/news/Advices.vue";
 import Interesting from "@/components/news/Interesting.vue";
 
 const headerItems = [
-  { label: "Последние обновления", targetId: "updates" },
-  { label: "Новые модели", targetId: "models" },
-  { label: "Советы по аукционам", targetId: "tips" },
-  { label: "Завершенные аукционы и интересные сделки", targetId: "auctions" },
+  { label: "Последние обновления", targetId: "news-updates" },
+  { label: "Новые модели", targetId: "news-models" },
+  { label: "Советы по аукционам", targetId: "news-tips" },
+  {
+    label: "Завершенные аукционы и интересные сделки",
+    targetId: "news-auctions",
+  },
 ];
 </script>
 

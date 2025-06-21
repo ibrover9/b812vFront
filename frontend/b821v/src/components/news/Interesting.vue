@@ -5,7 +5,7 @@
     :space-between="10"
   >
     <SwiperSlide v-for="item in newsInteresting" :key="item._id">
-      <div class="interesting-swiper__slide">
+      <div class="interesting-swiper__slide" id="news-auctions">
         <img
           class="interesting-swiper__slide-img"
           v-if="item.images.length"

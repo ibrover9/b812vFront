@@ -1,6 +1,6 @@
 <template>
   <div class="news-advices main-wrapper">
-    <div class="news-advices__title">Советы по аукционам</div>
+    <div id="news-tips" class="news-advices__title">Советы по аукционам</div>
     <hr class="main-hr" />
     <div
       class="news-advices__block"

@@ -4,7 +4,7 @@ import UpdateFunctionality from "./UpdateFunctionality.vue";
 </script>
 
 <template>
-  <div class="upates">
+  <div id="news-updates" class="upates">
     <UpdateFunctionality />
     <UpdateAuctionConditions />
   </div>

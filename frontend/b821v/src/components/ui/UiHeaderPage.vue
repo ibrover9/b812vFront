@@ -7,7 +7,9 @@
         class="ui-header-page__list-item"
         @click="scrollToSection(item.targetId)"
       >
-        {{ item.label }}
+        <a class="ui-header-page__list-item-a" :href="'#' + item.targetId">
+          {{ item.label }}
+        </a>
       </li>
     </ul>
   </div>
@@ -49,4 +51,7 @@ function scrollToSection(targetId) {
         color $thirdMainColor
     &__list-item:hover
         background-color $hoverBgBtnBlack
+    &__list-item-a
+        text-decoration none
+        color $thirdMainColor
 </style>
