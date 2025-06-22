@@ -75,7 +75,7 @@
             <UiButton>
               {{
                 auction.status === "processing"
-                  ? "Оформить договор"
+                  ? "Купить автомобиль"
                   : auction.status === "paid"
                   ? "Просмотр сделки"
                   : "Действие"
