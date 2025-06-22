@@ -39,7 +39,7 @@ const imageUrl = ref("");
 
 // Загружаем из userStore
 const imageSrc = computed(
-  () => imageUrl.value || userStore.avatarUrl || "/public/icon_profile.png"
+  () => imageUrl.value || userStore.avatarUrl || "/icon_profile.png"
 );
 
 function handleLogout() {

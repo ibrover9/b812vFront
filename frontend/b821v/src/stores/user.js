@@ -12,7 +12,7 @@ export const useUserStore = defineStore("user", () => {
   const emailVerified = ref(false);
   const updatedAt = ref("");
   const id = ref("");
-  const avatarUrl = ref(localStorage.getItem("avatarUrl") || "");
+  const avatarUrl = ref("");
   const token = ref("");
   const isLoggedIn = computed(() => !!token.value);
 
@@ -32,7 +32,7 @@ export const useUserStore = defineStore("user", () => {
     console.log(id.value);
     emailVerified.value = user.emailVerified || false;
     updatedAt.value = user.updatedAt || "";
-
+    localStorage.removeItem("avatarUrl");
     if (role.value === "company") {
       inn.value = user.inn || "";
       representativeFullName.value = user.representativeFullName || "";
