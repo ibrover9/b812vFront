@@ -38,6 +38,7 @@ import DealCards from "../components/deals/DealCards.vue";
 import UibuttonDocProfile from "@/components/ui/UibuttonDocProfile.vue";
 import UiButtonPriceProfile from "@/components/ui/UiButtonPriceProfile.vue";
 import AuctionProfile from "@/components/auctions/AuctionProfile.vue";
+import ProfileChangeImg from "@/components/profile/ProfileChangeImg.vue";
 const headerItems = [
   { label: "История ставок", targetId: "historyBid" },
   { label: "Скачать договоры", targetId: "contracts" },

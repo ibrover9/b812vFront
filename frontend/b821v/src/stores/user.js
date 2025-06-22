@@ -12,7 +12,7 @@ export const useUserStore = defineStore("user", () => {
   const emailVerified = ref(false);
   const updatedAt = ref("");
   const id = ref("");
-
+  const avatarUrl = ref(localStorage.getItem("avatarUrl") || "");
   const token = ref("");
   const isLoggedIn = computed(() => !!token.value);
 
@@ -40,6 +40,16 @@ export const useUserStore = defineStore("user", () => {
       firstName.value = user.firstName || "";
       lastName.value = user.lastName || "";
     }
+  }
+
+  function setAvatar(url) {
+    avatarUrl.value = url;
+    localStorage.setItem("avatarUrl", url);
+  }
+
+  function clearAvatar() {
+    avatarUrl.value = "";
+    localStorage.removeItem("avatarUrl");
   }
 
   function logout() {
@@ -72,5 +82,8 @@ export const useUserStore = defineStore("user", () => {
     userInfo,
     login,
     logout,
+    avatarUrl,
+    setAvatar,
+    clearAvatar,
   };
 });
